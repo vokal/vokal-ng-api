@@ -1,5 +1,5 @@
 // Check for and attach token on all API requests
-angular.module( "vokal.services", [] )
+angular.module( "vokal.services", [ "Humps" ] )
 
 .factory( "API", [ "$http", "$rootScope", "$location", "$q", "Humps",
 
