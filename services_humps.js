@@ -1,7 +1,7 @@
 "use strict";
 
 /* Humps Service, depends on https://github.com/domchristie/humps/blob/master/humps.js */
-angular.module( "vokal.services", [] )
+angular.module( "vokal.Humps", [] )
 
 .factory( "Humps",
     function ()
