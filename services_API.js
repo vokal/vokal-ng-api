@@ -9,7 +9,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
         var apiRequest = function( method, path, requestData )
         {
-            var defer = $q.defer();
+            var defer   = $q.defer();
             var headers = { "AUTHORIZATION": "Token " + $rootScope.authToken };
             var options = {
                 method: method,
