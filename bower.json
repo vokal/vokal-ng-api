@@ -10,5 +10,8 @@
     "license": "MIT",
     "module" : [
         "services_humps.js"
-    ]
+    ],
+    "dependencies" : {
+        "humps": "https://github.com/domchristie/humps.git"
+    }
 }
