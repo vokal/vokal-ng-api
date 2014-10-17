@@ -8,9 +8,6 @@
     "description": "Vokals API Service",
     "main": "services_API.js",
     "license": "MIT",
-    "module" : [
-        "services_humps.js"
-    ],
     "dependencies" : {
         "humps": "https://github.com/domchristie/humps.git"
     }
