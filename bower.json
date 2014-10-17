@@ -1,0 +1,14 @@
+{
+    "name": "vokal-ng-api",
+    "version": "1.0.0",
+    "homepage": "https://github.com/vokalinteractive/vokal-ng-api",
+    "authors": [
+        "vokalinteractive"
+    ],
+    "description": "Vokals API Service",
+    "main": "services_API.js",
+    "license": "MIT",
+    "dependencies" : {
+        "humps": "https://github.com/domchristie/humps.git"
+    }
+}
