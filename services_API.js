@@ -48,6 +48,11 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 
             } );
 
+            defer.promise.$cancel = function ( val )
+            {
+                defer.reject( val || "Request Cancelled" );
+            };
+
             return defer.promise;
         };
 
