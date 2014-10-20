@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "homepage": "https://github.com/vokalinteractive/vokal-ng-api",
     "authors": [
-        "vokalinteractive"
+        { "name" : "VOKAL Interactive", "email" : "webdevelopers@vokalinteractive.com" }
     ],
     "description": "Vokals API Service",
     "main": "services_API.js",
