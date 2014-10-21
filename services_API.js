@@ -9,6 +9,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
         var apiRequest = function( method, path, requestData )
         {
+            var defer   = $q.defer();
             var headers = { "AUTHORIZATION": "Token " + $rootScope.authToken };
             var options = {
                 method: method,
@@ -16,7 +17,8 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 headers: headers,
                 data: requestData || {},
                 transformRequest: Humps.requestToSnake( $http.defaults.transformResponse ),
-                transformResponse: Humps.responseToCamel( $http.defaults.transformResponse )
+                transformResponse: Humps.responseToCamel( $http.defaults.transformResponse ),
+                timeout: defer.promise
             };
 
             if( method === "postFile" )
@@ -27,14 +29,9 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 options.transformRequest  = angular.identity;
             }
 
-            var callbacks   = {};
-            var canceler    = $q.defer();
-            options.timeout = canceler.promise;
-
             $http( options ).success( function ( data, status, headers, config )
             {
-                if( callbacks.success ) { callbacks.success( data, status, headers, config ); }
-
+                defer.resolve( data );
             } ).error( function ( data, status, headers, config )
             {
                 if( status === 401 || status === 403 )
@@ -47,30 +44,16 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                         return;
                     }
                 }
-
-                if( callbacks.error ) { callbacks.error( data, status, headers, config ); }
-
+                defer.reject( data );
+                
             } );
 
-            var methods = {
-
-                $cancel: function ()
-                {
-                    canceler.resolve( "Request canceled" );
-                },
-                success: function ( callback )
-                {
-                    callbacks.success = callback;
-                    return methods;
-                },
-                error: function ( callback )
-                {
-                    callbacks.error = callback;
-                    return methods;
-                }
+            defer.promise.$cancel = function ( val )
+            {
+                defer.reject( val || "Request Cancelled" );
             };
 
-            return methods;
+            return defer.promise;
         };
 
         return {
