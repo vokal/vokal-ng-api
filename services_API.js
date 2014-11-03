@@ -13,7 +13,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
     // App config options
     this.transformHumps        = true;
-    this.cancelOnRouteChange   = true;
+    this.cancelOnRouteChange   = false;
     this.unauthorizedInterrupt = true;
     this.setHeaders = function ( headers )
     {

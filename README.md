@@ -11,7 +11,7 @@ The following properties and methods are available in your app's config block vi
 property | accepts | description
 -------- | ------- | -----------
 transformHumps | Bool | Your request body will have its parameter names changed from camel case to underscores before being sent, and the response body will have its parameter names changed from underscores to camel case before arriving.  Disable by setting to `false`.
-cancelOnRouteChange | Bool | When your application route changes, any in-progress API calls will be cancled.  Disable by setting to `false`.
+cancelOnRouteChange | Bool | When your application route changes, any in-progress API calls will be cancled.  Enable by setting to `true`.
 unauthorizedInterrupt | Bool | When an API route returns a 401 or 403 status code, the normal error-handler events will not be fired, to make any redirect handling attached to the unauthorized route function without unintended incident.  Disable by setting to `false`.
 
 method | accepts | description
