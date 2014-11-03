@@ -32,7 +32,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             var defer   = $q.defer();
             var options = {
                 method:  method,
-                url:     that.rootPath + path,
+                url:     rootPath + path,
                 headers: globalHeaders,
                 data:    requestData || {},
                 timeout: defer.promise
@@ -46,6 +46,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             }
             else if( that.transformHumps )
             {
+                globalHeaders[ "Content-Type" ] = "application/json";
                 options.transformRequest  = Humps.requestToSnake( $http.defaults.transformRequest );
                 options.transformResponse = Humps.responseToCamel( $http.defaults.transformResponse );
             }
