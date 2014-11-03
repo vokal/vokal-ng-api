@@ -9,13 +9,13 @@ Configuration
 The following properties and methods are available in your app's config block via `APIProvider`.
 
 property | accepts | description
--- | -- | --
+-------- | ------- | -----------
 transformHumps | Bool | Your request body will have its parameter names changed from camel case to underscores before being sent, and the response body will have its parameter names changed from underscores to camel case before arriving.  Disable by setting to `false`.
 cancelOnRouteChange | Bool | When your application route changes, any in-progress API calls will be cancled.  Disable by setting to `false`.
 unauthorizedInterrupt | Bool | When an API route returns a 401 or 403 status code, the normal error-handler events will not be fired, to make any redirect handling attached to the unauthorized route function without unintended incident.  Disable by setting to `false`.
 
 method | accepts | description
--- | -- | --
+------ | ------- | -----------
 setHeaders( headers ) | Object | Pass an object that you'd like to be used as the `headers` parameter in the `$http` request.  Will extend the existing headers object, which contains the authorization key.
 setRootPath( path ) | String | Pass a string that will prepend all API requests.
 
@@ -25,7 +25,7 @@ Interface
 The following methods can be called on the `API` service once injected into your Angular code.
 
 method | accepts | description
--- | -- | --
+------ | ------- | -----------
 setKey( key ) | String | Pass in the key that you will use to authenticate with your API routes.  The key will be assigned to a header value named `AUTHORIZATION`.
 getKey() | | Returns the API key, once set.
 $get( path ) | String | Performs an HTTP `GET` request on the supplied API route.
@@ -43,7 +43,7 @@ Events
 The following events will be broadcast on `$rootScope` during the `API` service's lifecycle.
 
 event | returns | description
--- | -- | --
+----- | ------- | -----------
 APIRequestStart | options | Broadcast at the start of any API request, returns the options that were passed into the `$http` request.
 APIRequestComplete | options, data, status | Broadcast upon the completion of any API request, returns the options that were passed into the `$http` request, the data in the response, and the status code of the response.
 APIRequestSuccess | options, data, status | Broadcast upon the successful completion of any API request, returns the options that were passed into the `$http` request, the data in the response, and the status code of the response.
