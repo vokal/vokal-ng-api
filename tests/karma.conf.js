@@ -1,13 +1,15 @@
 module.exports = function ( config )
 {
+    "use strict";
+
     config.set( {
 
-        basePath: "../",
+        basePath:   "../",
         frameworks: [ "jasmine" ],
-        autoWatch: false,
-        browsers: [ "PhantomJS" ],
-        reporters: [ "dots" ],
-        singleRun: true,
+        autoWatch:  false,
+        browsers:   [ "PhantomJS" ],
+        reporters:  [ "dots" ],
+        singleRun:  true,
         plugins: [
             "karma-jasmine",
             "karma-phantomjs-launcher"
@@ -25,5 +27,5 @@ module.exports = function ( config )
         ]
 
     } );
-    
+
 };

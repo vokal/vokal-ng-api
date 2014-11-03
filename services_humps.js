@@ -1,38 +1,35 @@
-"use strict";
+/* Humps service, depends on https://github.com/domchristie/humps/blob/master/humps.js */
 
-/* Humps Service, depends on https://github.com/domchristie/humps/blob/master/humps.js */
 angular.module( "vokal.Humps", [] )
 
-.factory( "Humps",
+.service( "Humps",
+
     function ()
     {
         "use strict";
 
         var safeConcat = function ( base, addition )
         {
-            base = angular.isArray( base ) ? base : [base];
+            base = angular.isArray( base ) ? base : [ base ];
             return ( base.concat( addition ) );
         };
 
-        var responseToCamel = function( defaultTransforms )
+        this.responseToCamel = function ( defaultTransforms )
         {
             return ( safeConcat( defaultTransforms, function( value )
             {
-              return humps.camelizeKeys( value );
+                return humps.camelizeKeys( value );
+
             } ) );
         };
 
-        var requestToSnake = function( defaultTransforms )
+        this.requestToSnake = function ( defaultTransforms )
         {
             return ( safeConcat( defaultTransforms, function( value )
             {
                 return JSON.stringify( humps.decamelizeKeys( value, "_" ) );
-            } ) );
-        };
 
-        return {
-            responseToCamel: function( defaultTransforms ) { return responseToCamel( defaultTransforms ); },
-            requestToSnake: function( defaultTransforms ) { return requestToSnake( defaultTransforms ); }
+            } ) );
         };
 
     }

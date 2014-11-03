@@ -1,7 +1,7 @@
-"use strict";
-
 describe( "API", function ()
 {
+    "use strict";
+
     var API;
     var url = "/api/endpoint";
     var $httpBackend;
