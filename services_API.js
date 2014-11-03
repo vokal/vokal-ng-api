@@ -9,8 +9,9 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         "use strict";
 
         // Initialize private parameters
-        var globalHeaders = { "AUTHORIZATION": apiKey };
+        var globalHeaders = {};
         var rootPath      = "";
+        var that          = this;
 
         // App config options
         this.transformHumps        = true;
@@ -31,7 +32,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             var defer   = $q.defer();
             var options = {
                 method:  method,
-                url:     this.rootPath + path,
+                url:     that.rootPath + path,
                 headers: globalHeaders,
                 data:    requestData || {},
                 timeout: defer.promise
@@ -43,7 +44,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 options.method                  = "post";
                 options.transformRequest        = angular.identity;
             }
-            else if( this.transformHumps )
+            else if( that.transformHumps )
             {
                 options.transformRequest  = Humps.requestToSnake( $http.defaults.transformRequest );
                 options.transformResponse = Humps.responseToCamel( $http.defaults.transformResponse );
@@ -69,7 +70,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                         $rootScope.$broadcast( "APIRequestUnauthorized", options, data, status );
 
                         // By default, prevent resolutions for unauthorized requests to facilitate clean redirects
-                        if( !this.unauthorizedInterrupt )
+                        if( !that.unauthorizedInterrupt )
                         {
                             $rootScope.$broadcast( "APIRequestError", options, data, status );
                             defer.reject( data, status );
@@ -85,6 +86,22 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
             $rootScope.broadcast( "APIRequestStart", options );
 
+            // By default, cancel this API call if the application route is changed before it resolves
+            if( that.cancelOnRouteChange )
+            {
+                var routeMonitor = $rootScope.$on( "$routeChangeSuccess", function ()
+                {
+                    defer.promise.$cancel( "Request canceled", options );
+                    routeMonitor();
+                } );
+
+                var removeRouteMonitor = $rootScope.$on( "APIRequestComplete", function ()
+                {
+                    routeMonitor();
+                    removeRouteMonitor();
+                } );
+            }
+
             defer.promise.$cancel = function ( message, options )
             {
                 defer.reject( message || "Request cancelled", options );
@@ -92,22 +109,6 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
             return defer.promise;
         };
-
-        // By default, cancel this API call if the application route is changed before it resolves
-        if( this.cancelOnRouteChange )
-        {
-            var routeMonitor = $rootScope.$on( "$routeChangeSuccess", function ()
-            {
-                defer.promise.$cancel( "Request canceled", options );
-                routeMonitor();
-            } );
-
-            var removeRouteMonitor = $rootScope.$on( "APIRequestComplete", function ()
-            {
-                routeMonitor();
-                removeRouteMonitor();
-            } );
-        }
 
         // Interface methods
         this.$get = function ()
