@@ -2,30 +2,30 @@
 
 angular.module( "vokal.API", [ "vokal.Humps" ] )
 
-.provider( "API", [ "$http", "$rootScope", "$q", "Humps",
+.provider( "API", function ()
+{
+    "use strict";
 
-    function ( $http, $rootScope, $q, Humps )
+    // Initialize private parameters
+    var globalHeaders = {};
+    var rootPath      = "";
+    var that          = this;
+
+    // App config options
+    this.transformHumps        = true;
+    this.cancelOnRouteChange   = true;
+    this.unauthorizedInterrupt = true;
+    this.setHeaders = function ( headers )
     {
-        "use strict";
+        angular.extend( globalHeaders, headers );
+    };
+    this.setRootPath = function ( path )
+    {
+        rootPath = String( path );
+    };
 
-        // Initialize private parameters
-        var globalHeaders = {};
-        var rootPath      = "";
-        var that          = this;
-
-        // App config options
-        this.transformHumps        = true;
-        this.cancelOnRouteChange   = true;
-        this.unauthorizedInterrupt = true;
-        this.setHeaders = function ( headers )
-        {
-            angular.extend( globalHeaders, headers );
-        };
-        this.setRootPath = function ( path )
-        {
-            rootPath = String( path );
-        };
-
+    this.$get = [ "$http", "$rootScope", "$q", "Humps", function ( $http, $rootScope, $q, Humps )
+    {
         // The driver for API requests
         var apiRequest = function ( method, path, requestData )
         {
@@ -84,7 +84,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
                 } );
 
-            $rootScope.broadcast( "APIRequestStart", options );
+            $rootScope.$broadcast( "APIRequestStart", options );
 
             // By default, cancel this API call if the application route is changed before it resolves
             if( that.cancelOnRouteChange )
@@ -111,26 +111,22 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         };
 
         // Interface methods
-        this.$get = function ()
-        {
-            return {
-                setKey: function ( key )
-                {
-                    globalHeaders.AUTHORIZATION = String( key );
-                },
-                getKey: function ()
-                {
-                    return globalHeaders.AUTHORIZATION;
-                },
-                $get:      function ( path ) {              return apiRequest( "get",      path ); },
-                $post:     function ( path, requestData ) { return apiRequest( "post",     path, requestData ); },
-                $postFile: function ( path, requestData ) { return apiRequest( "postFile", path, requestData ); },
-                $put:      function ( path, requestData ) { return apiRequest( "put",      path, requestData ); },
-                $patch:    function ( path, requestData ) { return apiRequest( "patch",    path, requestData ); },
-                $delete:   function ( path ) {              return apiRequest( "delete",   path ); }
-            };
+        return {
+            setKey: function ( key )
+            {
+                globalHeaders.AUTHORIZATION = String( key );
+            },
+            getKey: function ()
+            {
+                return globalHeaders.AUTHORIZATION;
+            },
+            $get:      function ( path ) {              return apiRequest( "get",      path ); },
+            $post:     function ( path, requestData ) { return apiRequest( "post",     path, requestData ); },
+            $postFile: function ( path, requestData ) { return apiRequest( "postFile", path, requestData ); },
+            $put:      function ( path, requestData ) { return apiRequest( "put",      path, requestData ); },
+            $patch:    function ( path, requestData ) { return apiRequest( "patch",    path, requestData ); },
+            $delete:   function ( path ) {              return apiRequest( "delete",   path ); }
         };
+    } ];
 
-    }
-
-] );
+} );
