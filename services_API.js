@@ -87,7 +87,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
             $rootScope.$broadcast( "APIRequestStart", options );
 
-            // By default, cancel this API call if the application route is changed before it resolves
+            // If enabled, cancel this API call if the application route is changed before it resolves
             if( that.cancelOnRouteChange )
             {
                 var routeMonitor = $rootScope.$on( "$routeChangeSuccess", function ()
