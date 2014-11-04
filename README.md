@@ -49,3 +49,4 @@ APIRequestComplete | options, data, status | Broadcast upon the completion of an
 APIRequestSuccess | options, data, status | Broadcast upon the successful completion of any API request, returns the options that were passed into the `$http` request, the data in the response, and the status code of the response.
 APIRequestError | options, data, status | Broadcast upon the erroneous completion of any API request, returns the options that were passed into the `$http` request, the data in the response, and the status code of the response.
 APIRequestUnauthorized | options, data, status | Broadcast upon the unauthorized (status codes `401` or `403`) completion of any API request, returns the options that were passed into the `$http` request, the data in the response, and the status code of the response.
+APIRequestCanceled | options | Broadcast when the `$cancel` method is called on an API promise, returns the options that were passed into the `$http` request.

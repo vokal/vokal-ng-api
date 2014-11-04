@@ -105,6 +105,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
             defer.promise.$cancel = function ( message, options )
             {
+                $rootScope.$broadcast( "APIRequestCanceled", options );
                 defer.reject( message || "Request cancelled", options );
             };
 
