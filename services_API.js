@@ -105,7 +105,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
             defer.promise.$cancel = function ( message, options )
             {
-                $rootScope.$broadcast( "APIRequestCanceled", options );
+                $rootScope.$broadcast( "APIRequestCanceled", options, message );
                 defer.reject( message || "Request cancelled", options );
             };
 
@@ -129,6 +129,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             $patch:    function ( path, requestData ) { return apiRequest( "patch",    path, requestData ); },
             $delete:   function ( path ) {              return apiRequest( "delete",   path ); }
         };
+
     } ];
 
 } );
