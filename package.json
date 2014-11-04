@@ -1,7 +1,7 @@
 {
   "name": "vokal-ng-api",
-  "version": "1.0.0",
-  "description": "Vokals API Service",
+  "version": "2.0.0",
+  "description": "Vokal's API Service",
   "homepage": "http://github.com/vokalinteractive/vokal-ng-api",
   "bugs": {
     "url": "http://github.com/vokalinteractive/vokal-ng-api/issues"

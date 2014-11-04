@@ -1,6 +1,6 @@
 {
   "name": "vokal-ng-api",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "homepage": "https://github.com/vokalinteractive/vokal-ng-api",
   "authors": [
     {
@@ -8,12 +8,12 @@
       "email": "webdevelopers@vokalinteractive.com"
     }
   ],
-  "description": "Vokals API Service",
+  "description": "Vokal's API Service",
   "main": "services_API.js",
   "license": "MIT",
   "dependencies": {
     "angular": "~1.3.0",
-    "humps": "https://github.com/domchristie/humps.git"
+    "humps": "git@github.com:domchristie/humps.git"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.0"
