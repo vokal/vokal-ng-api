@@ -1,4 +1,4 @@
-describe( "API", function ()
+describe( "API with Humps", function ()
 {
     "use strict";
 
@@ -102,7 +102,7 @@ describe( "API", function ()
         expect( flag ).toBe( "Success" );
     } );
 
-    it( "should work with Humps", function ()
+    it( "should transform requests", function ()
     {
         var result;
 
@@ -118,24 +118,7 @@ describe( "API", function ()
         expect( result.some_value ).toBeUndefined();
     } );
 
-    /*
-    // requires turning off humps, need fake module http://stackoverflow.com/questions/14771810/how-to-test-angularjs-custom-provider
-    it( "should work without Humps", function ()
-    {
-        var result;
 
-        API.$post( noHumpsUrl, { someValue: "value" } )
-        .then( function ( data )
-        {
-            result = data;
-        } );
-
-        $httpBackend.flush();
-
-        expect( result.someValue ).toBeDefined();
-        expect( result.some_value ).toBeUndefined();
-    } );
-    */
     afterEach( function ()
     {
         $httpBackend.verifyNoOutstandingExpectation();
