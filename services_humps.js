@@ -27,7 +27,11 @@ angular.module( "vokal.Humps", [] )
         {
             return ( safeConcat( defaultTransforms, function( value )
             {
-                return JSON.stringify( humps.decamelizeKeys( value, "_" ) );
+                if ( typeof( value ) === "string" )
+                {
+                    return JSON.stringify( humps.decamelizeKeys( JSON.parse( value ), "_" ) );
+                }
+                return humps.decamelizeKeys( value, "_" );
 
             } ) );
         };

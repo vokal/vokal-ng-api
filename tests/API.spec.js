@@ -4,6 +4,8 @@ describe( "API", function ()
 
     var API;
     var url = "/api/endpoint";
+    var humpsUrl = "/humps";
+    var noHumpsUrl = "/no-humps"
     var $httpBackend;
 
     beforeEach( module( "vokal.API" ) );
@@ -14,6 +16,30 @@ describe( "API", function ()
 
         $httpBackend.when( "GET", url ).respond( "Value" );
         $httpBackend.when( "POST", url ).respond( "Success" );
+
+        $httpBackend.when( "POST", humpsUrl )
+            .respond( function ( method, url, data )
+            {
+                var obj = angular.fromJson ( data );
+
+                return [
+                    201,
+                    { some_value: obj.some_value },
+                    {}
+                ];
+            } );
+
+        $httpBackend.when( "POST", noHumpsUrl )
+            .respond( function ( method, url, data )
+            {
+                var obj = angular.fromJson ( data );
+
+                return [
+                    201,
+                    { someValue: obj.someValue },
+                    {}
+                ];
+            } );
 
     } ) );
 
@@ -76,6 +102,40 @@ describe( "API", function ()
         expect( flag ).toBe( "Success" );
     } );
 
+    it( "should work with Humps", function ()
+    {
+        var result;
+
+        API.$post( humpsUrl, { someValue: "value" } )
+        .then( function ( data )
+        {
+            result = data;
+        } );
+
+        $httpBackend.flush();
+
+        expect( result.someValue ).toBeDefined();
+        expect( result.some_value ).toBeUndefined();
+    } );
+
+    /*
+    // requires turning off humps, need fake module http://stackoverflow.com/questions/14771810/how-to-test-angularjs-custom-provider
+    it( "should work without Humps", function ()
+    {
+        var result;
+
+        API.$post( noHumpsUrl, { someValue: "value" } )
+        .then( function ( data )
+        {
+            result = data;
+        } );
+
+        $httpBackend.flush();
+
+        expect( result.someValue ).toBeDefined();
+        expect( result.some_value ).toBeUndefined();
+    } );
+    */
     afterEach( function ()
     {
         $httpBackend.verifyNoOutstandingExpectation();
