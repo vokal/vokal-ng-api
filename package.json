@@ -25,6 +25,7 @@
     "karma": "^0.12.24",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.4",
+    "karma-coverage": "~0.1",
     "phantomjs": "^1.9.11"
   }
 }
