@@ -13,7 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "angular": "~1.3.0",
-    "humps": "git@github.com:domchristie/humps.git"
+    "humps": "https://github.com/domchristie/humps.git"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.0"
