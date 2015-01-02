@@ -43,18 +43,18 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         angular.forEach( (keyValue || "").split( "&" ),
             function( keyValue )
             {
-                if ( keyValue )
+                if( keyValue )
                 {
                     key_value = keyValue.replace( /\+/g, "%20" ).split( "=" );
                     key = tryDecodeURIComponent( key_value[ 0 ] );
-                    if ( angular.isDefined( key ) )
+                    if( angular.isDefined( key ) )
                     {
                         var val = angular.isDefined( key_value[ 1 ] ) ? tryDecodeURIComponent( key_value[1] ) : true;
-                        if ( !hasOwnProperty.call( obj, key ) )
+                        if( !hasOwnProperty.call( obj, key ) )
                         {
                             obj[ key ] = val;
                         }
-                        else if ( angular.isArray( obj[ key ] ) )
+                        else if( angular.isArray( obj[ key ] ) )
                         {
                             obj[key].push(val);
                         }
@@ -66,6 +66,24 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 }
             } );
         return obj;
+    }
+
+    /* private based on angular.js source */
+    function encodeUriQuery( val )
+    {
+      return encodeURIComponent(val).
+                 replace( /%40/gi, "@" ).
+                 replace( /%3A/gi, ":" ).
+                 replace( /%24/g, "$" ).
+                 replace( /%2C/gi, "," ).
+                 replace( /%3B/gi, ";" ).
+                 replace( /%20/g, "+" ).
+                 replace( /%7B/g, "{" ).
+                 replace( /%7D/g, "}" ).
+                 replace( /%5B/g, "[" ).
+                 replace( /%5D/g, "]" ).
+                 replace( /%22/g, '"' ).
+                 replace( /%5C/g, "\\" );
     }
 
     this.$get = [ "$http", "$rootScope", "$q", "Humps", function ( $http, $rootScope, $q, Humps )
@@ -160,7 +178,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         {
             var pathAndQuery = path.split( "?" );
 
-            if ( pathAndQuery.length === 1 )
+            if( pathAndQuery.length === 1 )
             {
                 return ( {} );
             }
@@ -170,7 +188,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
         var queryUrl = function ( path, requestData )
         {
-            if ( !angular.isObject( requestData ) )
+            if( !angular.isObject( requestData ) )
             {
                 return( path );
             }
@@ -188,10 +206,10 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 {
                     value = JSON.stringify( value );
                 }
-                queryParts.push( key + "=" + value );
+                queryParts.push( encodeUriQuery( key ) + "=" + encodeUriQuery( value ) );
             }
 
-            return ( path + ( queryParts.length ? "?" + queryParts.join( "&" ) : "" ) );
+            return( path + ( queryParts.length ? "?" + queryParts.join( "&" ) : "" ) );
         };
 
         // Interface methods
