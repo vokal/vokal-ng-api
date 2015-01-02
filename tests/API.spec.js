@@ -118,6 +118,30 @@ describe( "API with Humps", function ()
         expect( result.some_value ).toBeUndefined();
     } );
 
+    it( "should create querystrings", function ()
+    {
+        expect( API.queryUrl( "/the/path/" ) )
+            .toEqual( "/the/path/" );
+
+        expect( API.queryUrl( "/the/path/?key=value" ) )
+            .toEqual( "/the/path/?key=value" );
+
+        expect( API.queryUrl( "/the/path/", { key1: "1", key2: "2" } ) )
+            .toEqual( "/the/path/?key1=1&key2=2" );
+
+        expect( API.queryUrl( "/the/path/", { key1: { key2: 2 } } ) )
+            .toEqual( "/the/path/?key1={\"key2\":2}" );
+
+        expect( API.queryUrl( "/the/path/?key1={\"key2\":2}", { key1: 1 } ) )
+            .toEqual( "/the/path/?key1=1" );
+
+        expect( API.queryUrl( "/the/path/?key=1", { key: "value" } ) )
+            .toEqual( "/the/path/?key=value" );
+
+        expect( API.queryUrl( "/the/path/", { key: [ 1, "'", '"', "&", "=", "?", false ] } ) )
+            .toEqual( "/the/path/?key=[1,\"'\",\"\\\"\",\"%26\",\"%3D\",\"%3F\",false]" );
+    } );
+
 
     afterEach( function ()
     {
