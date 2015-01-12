@@ -31,6 +31,7 @@ angular.module( "vokal.Humps", [] )
                 {
                     return JSON.stringify( humps.decamelizeKeys( JSON.parse( value ), "_" ) );
                 }
+
                 return humps.decamelizeKeys( value, "_" );
 
             } ) );
