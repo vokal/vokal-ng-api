@@ -28,13 +28,13 @@ method | accepts | description
 ------ | ------- | -----------
 setKey( key ) | String | Pass in the key that you will use to authenticate with your API routes.  The key will be assigned to a header value named `AUTHORIZATION`.
 getKey() | | Returns the API key, once set.
-$get( path[, requestData] ) | String, Object | Performs an HTTP `GET` request on the supplied API route. If requestData is an object it will be converted to a querystring on the request.
+queryUrl( path, requestData ) | String, Object | Appends requestData onto path, returning a full query string. This is the method used by $get.
+$get( path[, requestData] ) | String, Object | Performs an HTTP `GET` request on the supplied API route. If requestData is supplied and an object it will be appended to the query string.
 $post( path, requestData ) | String, Object | Performs an HTTP `POST` request to the supplied API route, with the supplied data.
 $postFile( path, requestData ) | String, FormData | Performs an HTTP `POST` request to the supplied API route, sending a single file along as multipart form data.  `transformHumps` is set to `false` for this request type automatically.
 $put( path, requestData ) | String, Object | Performs an HTTP `PUT` request to the supplied API route, with the supplied data.
 $patch( path, requestData ) | String, Object | Performs an HTTP `PATCH` request to the supplied API route, with the supplied data.
 $delete( path ) | String | Performs an HTTP `DELETE` request on the supplied API route.
-queryUrl( path, requestData ) | String, Object | Injects requestData into path to create querystring. This is the method used by $get as well.
 
 Methods beginning with `$` will return a promise that resolves upon completion of the API request.  You can attach success and failure handlers via `.then()`.  The promise also comes with a `$cancel` method that can be called to halt any in-progress HTTP request.
 

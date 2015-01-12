@@ -234,7 +234,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             {
                 return globalHeaders.AUTHORIZATION;
             },
-            queryUrl:  function ( path, requestData ) { return queryUrl( path, requestData ); },
+            queryUrl:  queryUrl,
             $get:      function ( path, requestData ) { return apiRequest( "get",      queryUrl( path, requestData ) ); },
             $post:     function ( path, requestData ) { return apiRequest( "post",     path, requestData ); },
             $postFile: function ( path, requestData ) { return apiRequest( "postFile", path, requestData ); },
