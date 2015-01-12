@@ -29,7 +29,7 @@ method | accepts | description
 setKey( key ) | String | Pass in the key that you will use to authenticate with your API routes.  The key will be assigned to a header value named `AUTHORIZATION`.
 getKey() | | Returns the API key, once set.
 queryUrl( path, requestData ) | String, Object | Appends requestData onto path, returning a full query string. This is the method used by $get.
-$get( path[, requestData] ) | String, Object | Performs an HTTP `GET` request on the supplied API route. If requestData is supplied and an object it will be appended to the query string.
+$get( path[, requestData] ) | String[, Object] | Performs an HTTP `GET` request on the supplied API route. If requestData is supplied and an object it will be appended to the query string.
 $post( path, requestData ) | String, Object | Performs an HTTP `POST` request to the supplied API route, with the supplied data.
 $postFile( path, requestData ) | String, FormData | Performs an HTTP `POST` request to the supplied API route, sending a single file along as multipart form data.  `transformHumps` is set to `false` for this request type automatically.
 $put( path, requestData ) | String, Object | Performs an HTTP `PUT` request to the supplied API route, with the supplied data.
