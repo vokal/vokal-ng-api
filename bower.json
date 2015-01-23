@@ -1,11 +1,11 @@
 {
   "name": "vokal-ng-api",
   "version": "2.0.0",
-  "homepage": "https://github.com/vokalinteractive/vokal-ng-api",
+  "homepage": "https://github.com/vokal/vokal-ng-api",
   "authors": [
     {
       "name": "VOKAL Interactive",
-      "email": "webdevelopers@vokalinteractive.com"
+      "email": "webdevelopers@vokal.io"
     }
   ],
   "description": "Vokal's API Service",
