@@ -31,7 +31,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         {
             return decodeURIComponent( value );
         }
-        catch ( e )
+        catch( e )
         {
             // Ignore any invalid URI component
         }
@@ -46,20 +46,20 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
             function ( keyValue )
             {
-                if ( keyValue )
+                if( keyValue )
                 {
                     key_value = keyValue.replace( /\+/g, "%20" ).split( "=" );
-                    key = tryDecodeURIComponent( key_value[ 0 ] );
+                    key       = tryDecodeURIComponent( key_value[ 0 ] );
 
-                    if ( angular.isDefined( key ) )
+                    if( angular.isDefined( key ) )
                     {
                         var val = angular.isDefined( key_value[ 1 ] ) ? tryDecodeURIComponent( key_value[ 1 ] ) : true;
 
-                        if ( !hasOwnProperty.call( obj, key ) )
+                        if( !hasOwnProperty.call( obj, key ) )
                         {
                             obj[ key ] = val;
                         }
-                        else if ( angular.isArray( obj[ key ] ) )
+                        else if( angular.isArray( obj[ key ] ) )
                         {
                             obj[ key ].push( val );
                         }
@@ -107,13 +107,13 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 timeout: defer.promise
             };
 
-            if ( method === "postFile" )
+            if( method === "postFile" )
             {
                 globalHeaders[ "Content-Type" ] = undefined;  // To ensure multipart boundary is added
                 options.method                  = "post";
                 options.transformRequest        = angular.identity;
             }
-            else if ( that.transformHumps )
+            else if( that.transformHumps )
             {
                 globalHeaders[ "Content-Type" ] = "application/json";
                 options.transformRequest  = Humps.requestToSnake( $http.defaults.transformRequest );
@@ -135,12 +135,12 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 {
                     $rootScope.$broadcast( "APIRequestComplete", options, data, status );
 
-                    if ( status === 401 || status === 403 )
+                    if( status === 401 || status === 403 )
                     {
                         $rootScope.$broadcast( "APIRequestUnauthorized", options, data, status );
 
                         // By default, prevent resolutions for unauthorized requests to facilitate clean redirects
-                        if ( !that.unauthorizedInterrupt )
+                        if( !that.unauthorizedInterrupt )
                         {
                             $rootScope.$broadcast( "APIRequestError", options, data, status );
                             defer.reject( data, status );
@@ -157,7 +157,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             $rootScope.$broadcast( "APIRequestStart", options );
 
             // If enabled, cancel this API call if the application route is changed before it resolves
-            if ( that.cancelOnRouteChange )
+            if( that.cancelOnRouteChange )
             {
                 var routeMonitor = $rootScope.$on( "$routeChangeSuccess", function ()
                 {
@@ -186,20 +186,20 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         {
             var pathAndQuery = path.split( "?" );
 
-            if ( pathAndQuery.length === 1 )
+            if( pathAndQuery.length === 1 )
             {
-                return ( {} );
+                return {};
             }
 
-            return ( parseKeyValue( pathAndQuery[ 1 ] ) );
+            return parseKeyValue( pathAndQuery[ 1 ] );
         };
 
         // Build a URL query string based on an object
         var queryUrl = function ( path, requestData )
         {
-            if ( !angular.isObject( requestData ) )
+            if( !angular.isObject( requestData ) )
             {
-                return ( path );
+                return path;
             }
 
             requestData = angular.extend( {}, getQueryData( path ), requestData || {} );
@@ -213,7 +213,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 var key   = keys[ k ];
                 var value = requestData[ key ];
 
-                if ( angular.isObject( value ) )
+                if( angular.isObject( value ) )
                 {
                     value = JSON.stringify( value );
                 }
@@ -221,7 +221,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 queryParts.push( encodeUriQuery( key ) + "=" + encodeUriQuery( value ) );
             }
 
-            return ( path + ( queryParts.length ? "?" + queryParts.join( "&" ) : "" ) );
+            return path + ( queryParts.length ? "?" + queryParts.join( "&" ) : "" );
         };
 
         // Interface methods

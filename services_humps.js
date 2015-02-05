@@ -11,7 +11,7 @@ angular.module( "vokal.Humps", [] )
         var safeConcat = function ( base, addition )
         {
             base = angular.isArray( base ) ? base : [ base ];
-            return ( base.concat( addition ) );
+            return base.concat( addition );
         };
 
         this.responseToCamel = function ( defaultTransforms )
@@ -27,7 +27,7 @@ angular.module( "vokal.Humps", [] )
         {
             return ( safeConcat( defaultTransforms, function( value )
             {
-                if ( typeof( value ) === "string" )
+                if( typeof( value ) === "string" )
                 {
                     return JSON.stringify( humps.decamelizeKeys( JSON.parse( value ), "_" ) );
                 }
