@@ -122,7 +122,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
             $http( options )
 
-                .success( function ( data )
+                .success( function ( data, status )
                 {
                     $rootScope.$broadcast( "APIRequestComplete", options, data, status );
                     $rootScope.$broadcast( "APIRequestSuccess",  options, data, status );
