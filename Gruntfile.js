@@ -12,7 +12,7 @@ module.exports = function( grunt )
             {
                 mangle: false,
                 compress: true,
-                banner: "/*! <%= pkg.name %> Copyright Vokal Interactive <%= grunt.template.today( 'yyyy' ) %> */",
+                banner: "/*! <%= pkg.name %> Copyright Vokal Interactive <%= grunt.template.today( 'yyyy' ) %> */\n",
                 sourceMap: false
             },
             all:
@@ -39,6 +39,5 @@ module.exports = function( grunt )
     // Load plugins
     grunt.loadNpmTasks( "grunt-contrib-uglify" );
     grunt.loadNpmTasks( "grunt-githooks" );
-
 
 };
