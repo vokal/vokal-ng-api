@@ -18,6 +18,7 @@
     "url": "http://github.com/vokal/vokal-ng-api"
   },
   "scripts": {
+    "postinstall": "grunt githooks",
     "test": "node ./node_modules/karma/bin/karma start tests/karma.conf.js"
   },
   "license": "MIT",
