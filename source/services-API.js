@@ -6,8 +6,6 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 {
     "use strict";
 
-    var test;
-
     // Initialize private parameters
     var globalHeaders = {};
     var rootPath      = "";
