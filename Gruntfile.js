@@ -10,7 +10,7 @@ module.exports = function( grunt )
         {
             options:
             {
-                mangle: false,
+                mangle: true,
                 compress: true,
                 banner: "/*! <%= pkg.name %> Copyright Vokal <%= grunt.template.today( 'yyyy' ) %> */\n",
                 sourceMap: false
