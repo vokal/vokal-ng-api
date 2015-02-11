@@ -132,6 +132,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                         "options": options,
                         "status":  status
                     } );
+
                 } )
 
                 .error( function ( data, status )
@@ -148,7 +149,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                             $rootScope.$broadcast( "APIRequestError", options, data, status );
                             defer.reject( { 
                                 "data":    data,
-                                "options": options, 
+                                "options": options,
                                 "status":  status
                             } );
                         }
@@ -186,9 +187,9 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             defer.promise.$cancel = function ( message, options )
             {
                 $rootScope.$broadcast( "APIRequestCanceled", options, message );
-                defer.reject( {
+                defer.reject( { 
                     "data":    message || "Request cancelled",
-                    "options": options
+                    "options": options,
                 } );
             };
 
