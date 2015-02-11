@@ -65,9 +65,9 @@ describe( "API with Humps", function ()
         {
             flag = "Incorrect";
         },
-        function ( val )
+        function ( obj )
         {
-            flag = val;
+            flag = obj.data;
         } );
 
         expect( promise.$cancel ).toBeDefined();
@@ -86,9 +86,9 @@ describe( "API with Humps", function ()
 
         $httpBackend.expectPOST( url );
         promise = API.$post( url );
-        promise.then( function ( val )
+        promise.then( function ( obj )
         {
-            flag = val;
+            flag = obj.data;
         },
         function ()
         {
@@ -107,9 +107,9 @@ describe( "API with Humps", function ()
         var result;
 
         API.$post( humpsUrl, { someValue: "value" } )
-        .then( function ( data )
+        .then( function ( obj )
         {
-            result = data;
+            result = obj.data;
         } );
 
         $httpBackend.flush();

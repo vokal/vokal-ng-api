@@ -36,7 +36,7 @@ $put( path, requestData ) | String, Object | Performs an HTTP `PUT` request to t
 $patch( path, requestData ) | String, Object | Performs an HTTP `PATCH` request to the supplied API route, with the supplied data.
 $delete( path ) | String | Performs an HTTP `DELETE` request on the supplied API route.
 
-Methods beginning with `$` will return a promise that resolves upon completion of the API request.  You can attach success and failure handlers via `.then()`.  The promise also comes with a `$cancel` method that can be called to halt any in-progress HTTP request.
+Methods beginning with `$` will return a promise that resolves upon completion of the API request as an object ( data, status, and options ).  You can attach success and failure handlers via `.then()`.  The promise also comes with a `$cancel` method that can be called to halt any in-progress HTTP request.
 
 Events
 -------------
@@ -46,7 +46,7 @@ The following events will be broadcast on `$rootScope` during the `API` service'
 event | returns | description
 ----- | ------- | -----------
 APIRequestStart | options | Broadcast at the start of any API request, returns the options that were passed into the `$http` request.
-APIRequestComplete | options, data, status | Broadcast upon the completion of any API request, returns the options that were passed into the `$http` request, the data in the response, and the status code of the response.
+APIRequestComplete | options | Broadcast upon the completion of any API request, returns the options that were passed into the `$http` request, the data in the response, and the status code of the response.
 APIRequestSuccess | options, data, status | Broadcast upon the successful completion of any API request, returns the options that were passed into the `$http` request, the data in the response, and the status code of the response.
 APIRequestError | options, data, status | Broadcast upon the erroneous completion of any API request, returns the options that were passed into the `$http` request, the data in the response, and the status code of the response.
 APIRequestUnauthorized | options, data, status | Broadcast upon the unauthorized (status codes `401` or `403`) completion of any API request, returns the options that were passed into the `$http` request, the data in the response, and the status code of the response.
