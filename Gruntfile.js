@@ -12,7 +12,7 @@ module.exports = function( grunt )
             {
                 mangle: false,
                 compress: true,
-                banner: "/*! <%= pkg.name %> Copyright Vokal Interactive <%= grunt.template.today( 'yyyy' ) %> */\n",
+                banner: "/*! <%= pkg.name %> Copyright Vokal <%= grunt.template.today( 'yyyy' ) %> */\n",
                 sourceMap: false
             },
             all:
@@ -20,17 +20,9 @@ module.exports = function( grunt )
                 files:
                 {
                     "dist/vokal-ng-api.min.js": [
-                        "source/*"
+                        "source/*.*"
                     ]
                 }
-            }
-        },
-
-        githooks:
-        {
-            all:
-            {
-                "pre-commit": "uglify"
             }
         }
 
@@ -38,6 +30,5 @@ module.exports = function( grunt )
 
     // Load plugins
     grunt.loadNpmTasks( "grunt-contrib-uglify" );
-    grunt.loadNpmTasks( "grunt-githooks" );
 
 };
