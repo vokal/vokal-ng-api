@@ -128,9 +128,9 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                     $rootScope.$broadcast( "APIRequestSuccess",  options, data, status );
 
                     defer.resolve( { 
-                        "data":    data,
-                        "options": options,
-                        "status":  status
+                        data:    data,
+                        options: options,
+                        status:  status
                     } );
 
                 } )
@@ -148,9 +148,9 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                         {
                             $rootScope.$broadcast( "APIRequestError", options, data, status );
                             defer.reject( { 
-                                "data":    data,
-                                "options": options,
-                                "status":  status
+                                data:    data,
+                                options: options,
+                                status:  status
                             } );
                         }
                     }
@@ -158,9 +158,9 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                     {
                         $rootScope.$broadcast( "APIRequestError", options, data, status );
                         defer.reject( { 
-                            "data":    data,
-                            "options": options,
-                            "status":  status
+                            data:    data,
+                            options: options,
+                            status:  status
                         } );
                     }
 
@@ -188,8 +188,8 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             {
                 $rootScope.$broadcast( "APIRequestCanceled", options, message );
                 defer.reject( { 
-                    "data":    message || "Request cancelled",
-                    "options": options,
+                    data:    message || "Request cancelled",
+                    options: options
                 } );
             };
 
