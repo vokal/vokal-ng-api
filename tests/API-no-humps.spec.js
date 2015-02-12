@@ -42,9 +42,9 @@ describe( "API without Humps", function ()
         var result;
 
         API.$post( noHumpsUrl, { someValue: "value" } )
-        .then( function ( data )
+        .then( function ( obj )
         {
-            result = data;
+            result = obj.data;
         } );
 
         $httpBackend.flush();

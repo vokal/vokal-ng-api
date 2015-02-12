@@ -127,7 +127,11 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                     $rootScope.$broadcast( "APIRequestComplete", options, data, status );
                     $rootScope.$broadcast( "APIRequestSuccess",  options, data, status );
 
-                    defer.resolve( data );
+                    defer.resolve( { 
+                        data:    data,
+                        options: options,
+                        status:  status
+                    } );
 
                 } )
 
@@ -143,13 +147,21 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                         if( !that.unauthorizedInterrupt )
                         {
                             $rootScope.$broadcast( "APIRequestError", options, data, status );
-                            defer.reject( data, status );
+                            defer.reject( { 
+                                data:    data,
+                                options: options,
+                                status:  status
+                            } );
                         }
                     }
                     else
                     {
                         $rootScope.$broadcast( "APIRequestError", options, data, status );
-                        defer.reject( data, status );
+                        defer.reject( { 
+                            data:    data,
+                            options: options,
+                            status:  status
+                        } );
                     }
 
                 } );
@@ -175,7 +187,10 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             defer.promise.$cancel = function ( message, options )
             {
                 $rootScope.$broadcast( "APIRequestCanceled", options, message );
-                defer.reject( message || "Request cancelled", options );
+                defer.reject( { 
+                    data:    message || "Request cancelled",
+                    options: options
+                } );
             };
 
             return defer.promise;
