@@ -1,12 +1,44 @@
-vokal-ng-api
-============
+# vokal-ng-api
 
 VOKAL's common Angular API service.
 
-Configuration
--------------
+## Configuration
 
 The following properties and methods are available in your app's config block via `APIProvider`.
+
+### transformHumps
+
+`true|false`
+
+Your request body will have its parameter names changed from camel case to underscores before being sent, and the response body will have its parameter names changed from underscores to camel case before arriving.  Disable by setting to `false`.
+
+### cancelOnRouteChange
+
+`true|false`
+
+When your application route changes, any in-progress API calls will be cancled.  Enable by setting to `true`.
+
+### unauthorizedInterrupt
+
+`true|false`
+
+When an API route returns a 401 or 403 status code, the normal error-handler events will not be fired, to make any redirect handling attached to the unauthorized route function without unintended incident.  Disable by setting to `false`.
+
+### setHeaders( headers )
+
+`[Object]`
+
+Pass an object that you'd like to be used as the `headers` parameter in the `$http` request.  Will extend the existing headers object, which contains the authorization key.
+
+### setRootPath( path )
+
+`String`
+
+Pass a string that will prepend all API requests.
+
+## Interface
+
+
 
 property | accepts | description
 -------- | ------- | -----------
@@ -19,8 +51,7 @@ method | accepts | description
 setHeaders( headers ) | Object | Pass an object that you'd like to be used as the `headers` parameter in the `$http` request.  Will extend the existing headers object, which contains the authorization key.
 setRootPath( path ) | String | Pass a string that will prepend all API requests.
 
-Interface
----------
+## Interface
 
 The following methods can be called on the `API` service once injected into your Angular code.
 
@@ -38,8 +69,7 @@ $delete( path ) | String | Performs an HTTP `DELETE` request on the supplied API
 
 Methods beginning with `$` will return a promise that resolves upon completion of the API request as an object ( data, status, and options ).  You can attach success and failure handlers via `.then()`.  The promise also comes with a `$cancel` method that can be called to halt any in-progress HTTP request.
 
-Events
--------------
+## Events
 
 The following events will be broadcast on `$rootScope` during the `API` service's lifecycle.
 
