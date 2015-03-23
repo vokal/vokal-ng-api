@@ -11,21 +11,21 @@ The following properties and methods are available in your app's config block vi
 
 #### `transformHumps`
 
-Type: `Boolean`
+Type: *Boolean*
 Default: `true`
 
 Your request body will have its parameter names changed from camel case to underscores before being sent, and the response body will have its parameter names changed from underscores to camel case before arriving.
 
 #### `cancelOnRouteChange`
 
-Type: `Boolean`
+Type: *Boolean*
 Default: `false`
 
 When your application route changes, any in-progress API calls will be cancled.
 
 #### `unauthorizedInterrupt`
 
-Type: `Boolean`
+Type: *Boolean*
 Default: `true`
 
 When an API route returns a 401 or 403 status code, the normal error-handler events will not be fired, to make any redirect handling attached to the unauthorized route function without unintended incident.
@@ -34,15 +34,19 @@ When an API route returns a 401 or 403 status code, the normal error-handler eve
 
 #### `setHeaders( headers )`
 
-`headers`: Object that you'd like to be used as the `headers` parameter in the `$http` request.
-Type: `Object`
-
 Will extend the existing headers object, which contains the authorization key.
+
+##### Arguments
+
+1. `headers` | *Object* | used as the `headers` parameter in the `$http` request
 
 #### `setRootPath( path )`
 
-`path`: Will prepend all API requests.
-Type: `String`
+Will prepend all API requests with the supplied string.
+
+##### Arguments
+
+1. `path` | *String* | fragment to prepend
 
 
 ## Interface
