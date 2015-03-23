@@ -1,55 +1,49 @@
 # vokal-ng-api
 
-VOKAL's common Angular API service.
+> VOKAL's common Angular API service.
+
 
 ## Configuration
 
 The following properties and methods are available in your app's config block via `APIProvider`.
 
-### transformHumps
+### Properties
 
-`true|false`
+#### `transformHumps`
 
-Your request body will have its parameter names changed from camel case to underscores before being sent, and the response body will have its parameter names changed from underscores to camel case before arriving.  Disable by setting to `false`.
+Type: `Boolean`
+Default: `true`
 
-### cancelOnRouteChange
+Your request body will have its parameter names changed from camel case to underscores before being sent, and the response body will have its parameter names changed from underscores to camel case before arriving.
 
-`true|false`
+#### `cancelOnRouteChange`
 
-When your application route changes, any in-progress API calls will be cancled.  Enable by setting to `true`.
+Type: `Boolean`
+Default: `false`
 
-### unauthorizedInterrupt
+When your application route changes, any in-progress API calls will be cancled.
 
-`true|false`
+#### `unauthorizedInterrupt`
 
-When an API route returns a 401 or 403 status code, the normal error-handler events will not be fired, to make any redirect handling attached to the unauthorized route function without unintended incident.  Disable by setting to `false`.
+Type: `Boolean`
+Default: `true`
 
-### setHeaders( headers )
+When an API route returns a 401 or 403 status code, the normal error-handler events will not be fired, to make any redirect handling attached to the unauthorized route function without unintended incident.
 
-`[Object]`
+### Methods
 
-Pass an object that you'd like to be used as the `headers` parameter in the `$http` request.  Will extend the existing headers object, which contains the authorization key.
+#### `setHeaders( headers )`
 
-### setRootPath( path )
+`headers`: Object that you'd like to be used as the `headers` parameter in the `$http` request.
+Type: `Object`
 
-`String`
+Will extend the existing headers object, which contains the authorization key.
 
-Pass a string that will prepend all API requests.
+#### `setRootPath( path )`
 
-## Interface
+`path`: Will prepend all API requests.
+Type: `String`
 
-
-
-property | accepts | description
--------- | ------- | -----------
-transformHumps | Bool | Your request body will have its parameter names changed from camel case to underscores before being sent, and the response body will have its parameter names changed from underscores to camel case before arriving.  Disable by setting to `false`.
-cancelOnRouteChange | Bool | When your application route changes, any in-progress API calls will be cancled.  Enable by setting to `true`.
-unauthorizedInterrupt | Bool | When an API route returns a 401 or 403 status code, the normal error-handler events will not be fired, to make any redirect handling attached to the unauthorized route function without unintended incident.  Disable by setting to `false`.
-
-method | accepts | description
------- | ------- | -----------
-setHeaders( headers ) | Object | Pass an object that you'd like to be used as the `headers` parameter in the `$http` request.  Will extend the existing headers object, which contains the authorization key.
-setRootPath( path ) | String | Pass a string that will prepend all API requests.
 
 ## Interface
 
