@@ -3,7 +3,7 @@ describe( "API without Humps", function ()
     "use strict";
 
     var API;
-    var noHumpsUrl = "/no-humps"
+    var noHumpsUrl = "/no-humps";
     var $httpBackend;
 
     beforeEach( function ()
@@ -18,10 +18,11 @@ describe( "API without Humps", function ()
 
         inject( function ( $injector )
         {
-            API = $injector.get( "API" );
+            API          = $injector.get( "API" );
             $httpBackend = $injector.get( "$httpBackend" );
 
             $httpBackend.when( "POST", noHumpsUrl )
+
                 .respond( function ( method, url, data )
                 {
                     var obj = angular.fromJson ( data );
@@ -42,10 +43,11 @@ describe( "API without Humps", function ()
         var result;
 
         API.$post( noHumpsUrl, { someValue: "value" } )
-        .then( function ( obj )
-        {
-            result = obj.data;
-        } );
+
+            .then( function ( obj )
+            {
+                result = obj.data;
+            } );
 
         $httpBackend.flush();
 

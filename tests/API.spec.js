@@ -3,21 +3,22 @@ describe( "API with Humps", function ()
     "use strict";
 
     var API;
-    var url = "/api/endpoint";
-    var humpsUrl = "/humps";
-    var noHumpsUrl = "/no-humps"
+    var url        = "/api/endpoint";
+    var humpsUrl   = "/humps";
+    var noHumpsUrl = "/no-humps";
     var $httpBackend;
 
     beforeEach( module( "vokal.API" ) );
     beforeEach( inject( function ( $injector )
     {
-        API = $injector.get( "API" );
+        API          = $injector.get( "API" );
         $httpBackend = $injector.get( "$httpBackend" );
 
         $httpBackend.when( "GET", url ).respond( "Value" );
         $httpBackend.when( "POST", url ).respond( "Success" );
 
         $httpBackend.when( "POST", humpsUrl )
+
             .respond( function ( method, url, data )
             {
                 var obj = angular.fromJson ( data );
@@ -30,6 +31,7 @@ describe( "API with Humps", function ()
             } );
 
         $httpBackend.when( "POST", noHumpsUrl )
+
             .respond( function ( method, url, data )
             {
                 var obj = angular.fromJson ( data );
@@ -107,10 +109,11 @@ describe( "API with Humps", function ()
         var result;
 
         API.$post( humpsUrl, { someValue: "value" } )
-        .then( function ( obj )
-        {
-            result = obj.data;
-        } );
+
+            .then( function ( obj )
+            {
+                result = obj.data;
+            } );
 
         $httpBackend.flush();
 
