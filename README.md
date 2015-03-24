@@ -2,14 +2,26 @@
 
 > Vokal's common Angular API service. Wraps Angular's `$http` service.
 
+* [Configuration](#section-config)
+* [Interface](#section-interface)
+* [Events](#section-events)
 
-## Configuration
+
+## <a name="section-config"></a>Configuration
 
 The following properties and methods are available in your app's config block via `APIProvider`.
 
+* Properties
+  * [transformHumps](#prop-transformHumps)
+  * [cancelOnRouteChange](#prop-cancelOnRouteChange)
+  * [unauthorizedInterrupt](#prop-unauthorizedInterrupt)
+* Methods
+  * [setHeaders( headers )](#method-setHeaders)
+  * [setRootPath( path )](#method-setRootPath)
+
 ### Properties
 
-#### `transformHumps`
+#### <a name="prop-transformHumps"></a>`transformHumps`
 
 *Boolean* | Default: `true`
 
@@ -17,7 +29,7 @@ Your request body will have its parameter names changed from camel case to under
 
 * * *
 
-#### `cancelOnRouteChange`
+#### <a name="prop-cancelOnRouteChange"></a>`cancelOnRouteChange`
 
 *Boolean* | Default: `false`
 
@@ -25,7 +37,7 @@ When your application route changes, any in-progress API calls will be cancled.
 
 * * *
 
-#### `unauthorizedInterrupt`
+#### <a name="prop-unauthorizedInterrupt"></a>`unauthorizedInterrupt`
 
 *Boolean* | Default: `true`
 
@@ -35,7 +47,7 @@ When an API route returns a 401 or 403 status code, the normal error-handler eve
 
 ### Methods
 
-#### `setHeaders( headers )`
+#### <a name="method-setHeaders"></a>`setHeaders( headers )`
 
 Will extend the existing headers object, which contains the authorization key.
 
@@ -45,7 +57,7 @@ Will extend the existing headers object, which contains the authorization key.
 
 * * *
 
-#### `setRootPath( path )`
+#### <a name="method-setRootPath"></a>`setRootPath( path )`
 
 Will prepend all API requests with the supplied string.
 
@@ -56,13 +68,21 @@ Will prepend all API requests with the supplied string.
 * * *
 
 
-## Interface
+## <a name="section-interface"></a>Interface
 
 The following methods can be called on the `API` service once injected into your Angular code.
 
-### Methods
+* [setKey( key )](#method-setKey)
+* [getKey()](#method-getKey)
+* [queryUrl( path, requestData )](#method-queryUrl)
+* [$get( path [, requestData ] )](#method-get)
+* [$post( path, requestData )](#method-post)
+* [$postFile( path, requestData )](#method-postFile)
+* [$put( path, requestData )](#method-put)
+* [$patch( path, requestData )](#method-patch)
+* [$delete( path )](#method-delete)
 
-#### `setKey( key )`
+#### <a name="method-setKey"></a>`setKey( key )`
 
 Sets the key that you will use to authenticate with your API.  The key will be assigned to a header value named `AUTHORIZATION`.
 
@@ -72,7 +92,7 @@ Sets the key that you will use to authenticate with your API.  The key will be a
 
 * * *
 
-#### `getKey()`
+#### <a name="method-getKey"></a>`getKey()`
 
 Returns the current value of API key.
 
@@ -82,7 +102,7 @@ Returns the current value of API key.
 
 * * *
 
-#### `queryUrl( path, requestData )`
+#### <a name="method-queryUrl"></a>`queryUrl( path, requestData )`
 
 Builds a URL from a base path and an object of parameters. This is the method used by `$get`.
 
@@ -97,7 +117,7 @@ Builds a URL from a base path and an object of parameters. This is the method us
 
 * * *
 
-#### `$get( path [, requestData ] )`
+#### <a name="method-get"></a>`$get( path [, requestData ] )`
 
 Performs an HTTP `GET` request on the supplied API route. If `requestData` is supplied it will be serialized and appended to the request as a query string.
 
@@ -123,7 +143,7 @@ The promise also comes with a custom `$cancel` method that can be called to halt
 
 * * *
 
-#### `$post( path, requestData )`
+#### <a name="method-post"></a>`$post( path, requestData )`
 
 Performs an HTTP `POST` request to the supplied API route.
 
@@ -149,7 +169,7 @@ The promise also comes with a custom `$cancel` method that can be called to halt
 
 * * *
 
-#### `$postFile( path, requestData )`
+#### <a name="method-postFile"></a>`$postFile( path, requestData )`
 
 Performs an HTTP `POST` request to the supplied API route, sending a single file along as multipart form data. `transformHumps` is set to `false` for this request type automatically.
 
@@ -175,7 +195,7 @@ The promise also comes with a custom `$cancel` method that can be called to halt
 
 * * *
 
-#### `$put( path, requestData )`
+#### <a name="method-put"></a>`$put( path, requestData )`
 
 Performs an HTTP `PUT` request to the supplied API route.
 
@@ -201,7 +221,7 @@ The promise also comes with a custom `$cancel` method that can be called to halt
 
 * * *
 
-#### `$patch( path, requestData )`
+#### <a name="method-patch"></a>`$patch( path, requestData )`
 
 Performs an HTTP `PATCH` request to the supplied API route.
 
@@ -227,7 +247,7 @@ The promise also comes with a custom `$cancel` method that can be called to halt
 
 * * *
 
-#### `$delete( path )`
+#### <a name="method-delete"></a>`$delete( path )`
 
 Performs an HTTP `DELETE` request on the supplied API route.
 
@@ -252,11 +272,18 @@ The promise also comes with a custom `$cancel` method that can be called to halt
 
 * * *
 
-## Events
+## <a name="section-events"></a>Events
 
 The following events will broadcast on `$rootScope` during the `API` service's life cycle.
 
-#### `APIRequestStart`
+* [APIRequestStart](#event-APIRequestStart)
+* [APIRequestComplete](#event-APIRequestComplete)
+* [APIRequestSuccess](#event-APIRequestSuccess)
+* [APIRequestError](#event-APIRequestError)
+* [APIRequestUnauthorized](#event-APIRequestUnauthorized)
+* [APIRequestCanceled](#event-APIRequestCanceled)
+
+#### <a name="event-APIRequestStart"></a>`APIRequestStart`
 
 Broadcasted at the start of any API request.
 
@@ -266,7 +293,7 @@ Broadcasted at the start of any API request.
 
 * * *
 
-#### `APIRequestComplete`
+#### <a name="event-APIRequestComplete"></a>`APIRequestComplete`
 
 Broadcasted upon the completion of any API request.
 
@@ -278,7 +305,7 @@ Broadcasted upon the completion of any API request.
 
 * * *
 
-#### `APIRequestSuccess`
+#### <a name="event-APIRequestSuccess"></a>`APIRequestSuccess`
 
 Broadcasted upon the successful completion of any API request.
 
@@ -290,7 +317,7 @@ Broadcasted upon the successful completion of any API request.
 
 * * *
 
-#### `APIRequestError`
+#### <a name="event-APIRequestError"></a>`APIRequestError`
 
 Broadcasted upon the erroneous completion of any API request.
 
@@ -302,7 +329,7 @@ Broadcasted upon the erroneous completion of any API request.
 
 * * *
 
-#### `APIRequestUnauthorized`
+#### <a name="event-APIRequestUnauthorized"></a>`APIRequestUnauthorized`
 
 Broadcasted upon the unauthorized (status codes `401` or `403`) completion of any API request.
 
@@ -314,7 +341,7 @@ Broadcasted upon the unauthorized (status codes `401` or `403`) completion of an
 
 * * *
 
-#### `APIRequestCanceled`
+#### <a name="event-APIRequestCanceled"></a>`APIRequestCanceled`
 
 Broadcasted when the `$cancel` method is called on an API promise.
 
