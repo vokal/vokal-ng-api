@@ -19,6 +19,8 @@ The following properties and methods are available in your app's config block vi
   * [setHeaders( headers )](#method-setHeaders)
   * [setRootPath( path )](#method-setRootPath)
 
+* * *
+
 ### Properties
 
 #### <a name="prop-transformHumps"></a>`transformHumps`
@@ -81,6 +83,8 @@ The following methods can be called on the `API` service once injected into your
 * [$put( path, requestData )](#method-put)
 * [$patch( path, requestData )](#method-patch)
 * [$delete( path )](#method-delete)
+
+* * *
 
 #### <a name="method-setKey"></a>`setKey( key )`
 
@@ -282,6 +286,8 @@ The following events will broadcast on `$rootScope` during the `API` service's l
 * [APIRequestError](#event-APIRequestError)
 * [APIRequestUnauthorized](#event-APIRequestUnauthorized)
 * [APIRequestCanceled](#event-APIRequestCanceled)
+
+* * *
 
 #### <a name="event-APIRequestStart"></a>`APIRequestStart`
 
