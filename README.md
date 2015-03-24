@@ -27,7 +27,7 @@ The following properties and methods are available in your app's config block vi
 
 *Boolean* | Default: `true`
 
-Your request body will have its parameter names changed from camel case to underscores before being sent, and the response body will have its parameter names changed from underscores to camel case before arriving.
+The request body will have its parameter names changed from camel case to underscore format before being sent, and the response body will have its parameter names changed from underscore to camel case format before arriving.
 
 * * *
 
@@ -35,7 +35,7 @@ Your request body will have its parameter names changed from camel case to under
 
 *Boolean* | Default: `false`
 
-When your application route changes, any in-progress API calls will be cancled.
+When the application route changes, any in-progress API calls will be cancled.
 
 * * *
 
