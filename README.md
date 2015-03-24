@@ -84,6 +84,8 @@ The following methods can be called on the `API` service once injected into your
 * [$patch( path, requestData )](#method-patch)
 * [$delete( path )](#method-delete)
 
+[Promise for HTTP Alias Methods](#promise-return)
+
 * * *
 
 #### <a name="method-setKey"></a>`setKey( key )`
@@ -132,18 +134,7 @@ Performs an HTTP `GET` request on the supplied API route. If `requestData` is su
 
 ##### Returns
 
-*Object* | An [Angular promise](https://docs.angularjs.org/api/ng/service/$q) that resolves upon completion of the API request.  The resolve/reject handlers are passed a response object with the following format:
-
-    {
-        data:    Object  | the response from the $http request,
-        options: Object  | the options that were passed into the $http request,
-        status:  Integer | the HTTP status code for the completed request
-    }
-
-The promise also comes with a custom `$cancel` method that can be called to halt the HTTP request while in-progress.  The `$cancel` method takes two optional arguments:
-
-1. `message` | *String* | a text message to describe the cancellation
-2. `options` | *Object* | an object to describe the canceled request
+*Object* | see [Promise for HTTP Alias Methods](#promise-return)
 
 * * *
 
@@ -158,18 +149,7 @@ Performs an HTTP `POST` request to the supplied API route.
 
 ##### Returns
 
-*Object* | An [Angular promise](https://docs.angularjs.org/api/ng/service/$q) that resolves upon completion of the API request.  The resolve/reject handlers are passed a response object with the following format:
-
-    {
-        data:    Object  | the response from the $http request,
-        options: Object  | the options that were passed into the $http request,
-        status:  Integer | the HTTP status code for the completed request
-    }
-
-The promise also comes with a custom `$cancel` method that can be called to halt the HTTP request while in-progress.  The `$cancel` method takes two optional arguments:
-
-1. `message` | *String* | a text message to describe the cancellation
-2. `options` | *Object* | an object to describe the canceled request
+*Object* | see [Promise for HTTP Alias Methods](#promise-return)
 
 * * *
 
@@ -184,18 +164,7 @@ Performs an HTTP `POST` request to the supplied API route, sending a single file
 
 ##### Returns
 
-*Object* | An [Angular promise](https://docs.angularjs.org/api/ng/service/$q) that resolves upon completion of the API request.  The resolve/reject handlers are passed a response object with the following format:
-
-    {
-        data:    Object  | the response from the $http request,
-        options: Object  | the options that were passed into the $http request,
-        status:  Integer | the HTTP status code for the completed request
-    }
-
-The promise also comes with a custom `$cancel` method that can be called to halt the HTTP request while in-progress.  The `$cancel` method takes two optional arguments:
-
-1. `message` | *String* | a text message to describe the cancellation
-2. `options` | *Object* | an object to describe the canceled request
+*Object* | see [Promise for HTTP Alias Methods](#promise-return)
 
 * * *
 
@@ -210,18 +179,7 @@ Performs an HTTP `PUT` request to the supplied API route.
 
 ##### Returns
 
-*Object* | An [Angular promise](https://docs.angularjs.org/api/ng/service/$q) that resolves upon completion of the API request.  The resolve/reject handlers are passed a response object with the following format:
-
-    {
-        data:    Object  | the response from the $http request,
-        options: Object  | the options that were passed into the $http request,
-        status:  Integer | the HTTP status code for the completed request
-    }
-
-The promise also comes with a custom `$cancel` method that can be called to halt the HTTP request while in-progress.  The `$cancel` method takes two optional arguments:
-
-1. `message` | *String* | a text message to describe the cancellation
-2. `options` | *Object* | an object to describe the canceled request
+*Object* | see [Promise for HTTP Alias Methods](#promise-return)
 
 * * *
 
@@ -236,18 +194,7 @@ Performs an HTTP `PATCH` request to the supplied API route.
 
 ##### Returns
 
-*Object* | An [Angular promise](https://docs.angularjs.org/api/ng/service/$q) that resolves upon completion of the API request.  The resolve/reject handlers are passed a response object with the following format:
-
-    {
-        data:    Object  | the response from the $http request,
-        options: Object  | the options that were passed into the $http request,
-        status:  Integer | the HTTP status code for the completed request
-    }
-
-The promise also comes with a custom `$cancel` method that can be called to halt the HTTP request while in-progress.  The `$cancel` method takes two optional arguments:
-
-1. `message` | *String* | a text message to describe the cancellation
-2. `options` | *Object* | an object to describe the canceled request
+*Object* | see [Promise for HTTP Alias Methods](#promise-return)
 
 * * *
 
@@ -261,7 +208,13 @@ Performs an HTTP `DELETE` request on the supplied API route.
 
 ##### Returns
 
-*Object* | An [Angular promise](https://docs.angularjs.org/api/ng/service/$q) that resolves upon completion of the API request.  The resolve/reject handlers are passed a response object with the following format:
+*Object* | see [Promise for HTTP Alias Methods](#promise-return)
+
+* * *
+
+### <a name="promise-return"></a>Promise for HTTP Alias Methods
+
+Methods beginning with `$` return an [Angular promise](https://docs.angularjs.org/api/ng/service/$q) that resolves upon completion of the API request.  The resolve/reject handlers are passed a response object with the following format:
 
     {
         data:    Object  | the response from the $http request,
@@ -269,7 +222,11 @@ Performs an HTTP `DELETE` request on the supplied API route.
         status:  Integer | the HTTP status code for the completed request
     }
 
-The promise also comes with a custom `$cancel` method that can be called to halt the HTTP request while in-progress.  The `$cancel` method takes two optional arguments:
+The promise includes a custom `$cancel` method:
+
+#### `$cancel( [ message, options ] )`
+
+Call to halt the HTTP request while in progress.
 
 1. `message` | *String* | a text message to describe the cancellation
 2. `options` | *Object* | an object to describe the canceled request
