@@ -291,7 +291,7 @@ The following events will broadcast on `$rootScope` during the `API` service's l
 
 #### <a name="event-APIRequestStart"></a>`APIRequestStart`
 
-Broadcasted at the start of any API request.
+Broadcast at the start of any API request.
 
 ##### Listener Arguments
 
@@ -301,7 +301,7 @@ Broadcasted at the start of any API request.
 
 #### <a name="event-APIRequestComplete"></a>`APIRequestComplete`
 
-Broadcasted upon the completion of any API request.
+Broadcast upon the completion of any API request.
 
 ##### Listener Arguments
 
@@ -313,7 +313,7 @@ Broadcasted upon the completion of any API request.
 
 #### <a name="event-APIRequestSuccess"></a>`APIRequestSuccess`
 
-Broadcasted upon the successful completion of any API request.
+Broadcast upon the successful completion of any API request.
 
 ##### Listener Arguments
 
@@ -325,7 +325,7 @@ Broadcasted upon the successful completion of any API request.
 
 #### <a name="event-APIRequestError"></a>`APIRequestError`
 
-Broadcasted upon the erroneous completion of any API request.
+Broadcast upon the erroneous completion of any API request.
 
 ##### Listener Arguments
 
@@ -337,7 +337,7 @@ Broadcasted upon the erroneous completion of any API request.
 
 #### <a name="event-APIRequestUnauthorized"></a>`APIRequestUnauthorized`
 
-Broadcasted upon the unauthorized (status codes `401` or `403`) completion of any API request.
+Broadcast upon the unauthorized (status codes `401` or `403`) completion of any API request.
 
 ##### Listener Arguments
 
@@ -349,7 +349,7 @@ Broadcasted upon the unauthorized (status codes `401` or `403`) completion of an
 
 #### <a name="event-APIRequestCanceled"></a>`APIRequestCanceled`
 
-Broadcasted when the `$cancel` method is called on an API promise.
+Broadcast when the `$cancel` method is called on an API promise.
 
 ##### Listener Arguments
 
