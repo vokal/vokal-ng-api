@@ -43,7 +43,7 @@ When your application route changes, any in-progress API calls will be cancled.
 
 *Boolean* | Default: `true`
 
-When an API route returns a 401 or 403 status code, the normal error-handler events will not be fired, to make any redirect handling attached to the unauthorized route function without unintended incident.
+When an API route returns a 401 or 403 status code, the normal error-handler events will not be fired. This allows any redirect handling attached to the unauthorized route function to run without conflict.
 
 * * *
 
