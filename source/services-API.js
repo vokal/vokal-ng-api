@@ -81,16 +81,16 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         return encodeURIComponent( val )
             .replace( /%40/gi, "@" )
             .replace( /%3A/gi, ":" )
-            .replace( /%24/g, "$" )
+            .replace( /%24/g,  "$" )
             .replace( /%2C/gi, "," )
             .replace( /%3B/gi, ";" )
-            .replace( /%20/g, "+" )
-            .replace( /%7B/g, "{" )
-            .replace( /%7D/g, "}" )
-            .replace( /%5B/g, "[" )
-            .replace( /%5D/g, "]" )
-            .replace( /%22/g, '"' )
-            .replace( /%5C/g, "\\" );
+            .replace( /%20/g,  "+" )
+            .replace( /%7B/g,  "{" )
+            .replace( /%7D/g,  "}" )
+            .replace( /%5B/g,  "[" )
+            .replace( /%5D/g,  "]" )
+            .replace( /%22/g,  '"' )
+            .replace( /%5C/g,  "\\" );
     }
 
     this.$get = [ "$http", "$rootScope", "$q", "Humps", function ( $http, $rootScope, $q, Humps )
@@ -127,7 +127,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                     $rootScope.$broadcast( "APIRequestComplete", options, data, status );
                     $rootScope.$broadcast( "APIRequestSuccess",  options, data, status );
 
-                    defer.resolve( { 
+                    defer.resolve( {
                         data:    data,
                         options: options,
                         status:  status
@@ -147,7 +147,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                         if( !that.unauthorizedInterrupt )
                         {
                             $rootScope.$broadcast( "APIRequestError", options, data, status );
-                            defer.reject( { 
+                            defer.reject( {
                                 data:    data,
                                 options: options,
                                 status:  status
@@ -157,7 +157,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                     else
                     {
                         $rootScope.$broadcast( "APIRequestError", options, data, status );
-                        defer.reject( { 
+                        defer.reject( {
                             data:    data,
                             options: options,
                             status:  status
@@ -187,7 +187,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             defer.promise.$cancel = function ( message, options )
             {
                 $rootScope.$broadcast( "APIRequestCanceled", options, message );
-                defer.reject( { 
+                defer.reject( {
                     data:    message || "Request cancelled",
                     options: options
                 } );

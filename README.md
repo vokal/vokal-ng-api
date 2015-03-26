@@ -27,7 +27,7 @@ The following properties and methods are available in your app's config block vi
 
 *Boolean* | Default: `true`
 
-Your request body will have its parameter names changed from camel case to underscores before being sent, and the response body will have its parameter names changed from underscores to camel case before arriving.
+The request body will have its parameter names changed from camel case to underscore format before being sent, and the response body will have its parameter names changed from underscore to camel case format before arriving.
 
 * * *
 
@@ -35,7 +35,7 @@ Your request body will have its parameter names changed from camel case to under
 
 *Boolean* | Default: `false`
 
-When your application route changes, any in-progress API calls will be cancled.
+When the application route changes, any in-progress API calls will be cancled.
 
 * * *
 
@@ -219,7 +219,7 @@ Methods beginning with `$` return an [Angular promise](https://docs.angularjs.or
     {
         data:    Object  | the response from the $http request,
         options: Object  | the options that were passed into the $http request,
-        status:  Integer | the HTTP status code for the completed request
+        status:  Number  | the HTTP status code for the completed request
     }
 
 The promise includes a custom `$cancel` method:
@@ -264,7 +264,7 @@ Broadcast upon the completion of any API request.
 
 1. `options` | *Object* | the options that were passed into the `$http` request
 2. `data` | *Object* | the response from the `$http` request
-3. `status` | *Integer* | the HTTP status code for the completed request
+3. `status` | *Number* | the HTTP status code for the completed request
 
 * * *
 
@@ -276,7 +276,7 @@ Broadcast upon the successful completion of any API request.
 
 1. `options` | *Object* | the options that were passed into the `$http` request
 2. `data` | *Object* | the response from the `$http` request
-3. `status` | *Integer* | the HTTP status code for the completed request
+3. `status` | *Number* | the HTTP status code for the completed request
 
 * * *
 
@@ -288,7 +288,7 @@ Broadcast upon the erroneous completion of any API request.
 
 1. `options` | *Object* | the options that were passed into the `$http` request
 2. `data` | *Object* | the response from the `$http` request
-3. `status` | *Integer* | the HTTP status code for the completed request
+3. `status` | *Number* | the HTTP status code for the completed request
 
 * * *
 
@@ -300,7 +300,7 @@ Broadcast upon the unauthorized (status codes `401` or `403`) completion of any 
 
 1. `options` | *Object* | the options that were passed into the `$http` request
 2. `data` | *Object* | the response from the `$http` request
-3. `status` | *Integer* | the HTTP status code for the completed request
+3. `status` | *Number* | the HTTP status code for the completed request
 
 * * *
 
