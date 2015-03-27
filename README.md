@@ -2,26 +2,95 @@
 
 > Vokal's common Angular API service. Wraps Angular's `$http` service.
 
-* [Configuration](#section-config)
-* [Interface](#section-interface)
+* [Configuration & Usage](#section-config-usage)
+* [HTTP Interface](#section-interface)
 * [Events](#section-events)
 
 
-## <a name="section-config"></a>Configuration
+## <a name="section-config-usage"></a>Configuration & Usage
 
-The following properties and methods are available in your app's config block via `APIProvider`.
+The `API` service returns a constructor function that can be used to instantiate a helper for an HTTP API.
 
-* Properties
-  * [transformHumps](#prop-transformHumps)
-  * [cancelOnRouteChange](#prop-cancelOnRouteChange)
-  * [unauthorizedInterrupt](#prop-unauthorizedInterrupt)
-* Methods
-  * [setHeaders( headers )](#method-setHeaders)
-  * [setRootPath( path )](#method-setRootPath)
+```javascript
+var Facebook = new API();
+```
+
+The service can be configured by setting individual properties, or by passing an optional configuration object at instantiation.
+
+```javascript
+var Facebook = new API();
+Facebook.rootPath = "https://graph.facebook.com/";
+Facebook.transformHumps = false;
+Facebook.setKey( token );
+```
+
+```javascript
+var Facebook = new API( {
+    rootPath: "https://graph.facebook.com/",
+    transformHumps: false,
+    globalHeaders: { AUTHORIZATION: token }
+} );
+```
+
+You can instantiate the service on the fly for single usage, but the recommended pattern is to create a dedicated service that returns a pre-configured instance.
+
+```javascript
+angular.module( "vokal.Facebook", [ vokal.API ] )
+
+.factory( "Facebook", [ "API",
+
+    function ()
+    {
+        "use strict";
+
+        var Facebook = new API( {
+            rootPath: "https://graph.facebook.com/",
+            transformHumps: false,
+            globalHeaders: { AUTHORIZATION: token }
+        } );
+
+        return Facebook;
+
+    }
+
+] );
+```
+
+
+The following properties can be set directly or via the constructor config object:
+
+* [globalHeaders](#prop-globalHeaders)
+* [rootPath](#prop-rootPath)
+* [transformHumps](#prop-transformHumps)
+* [cancelOnRouteChange](#prop-cancelOnRouteChange)
+* [unauthorizedInterrupt](#prop-unauthorizedInterrupt)
+
+Several methods are available during direct configuration:
+
+* [extendHeaders( headers )](#method-extendHeaders)
+* [setKey( key )](#method-setKey)
+* [getKey()](#method-getKey)
 
 * * *
 
 ### Properties
+
+
+#### <a name="prop-globalHeaders"></a>`globalHeaders`
+
+*Object* | Default: `{}`
+
+Supplied key/value pairs will be sent as request headers on API calls.  While this property can be accessed directly, calling [extendHeaders( headers )](#method-extendHeaders) is recommended to minimize the danger of losing already-set headers (like the authorization key).
+
+* * *
+
+#### <a name="prop-rootPath"></a>`rootPath`
+
+*String* | Default: `""`
+
+All API requests will be prepended with the supplied string.
+
+* * *
 
 #### <a name="prop-transformHumps"></a>`transformHumps`
 
@@ -35,7 +104,7 @@ The request body will have its parameter names changed from camel case to unders
 
 *Boolean* | Default: `false`
 
-When the application route changes, any in-progress API calls will be cancled.
+When the application route changes, any in-progress API calls will be canceled.
 
 * * *
 
@@ -49,42 +118,13 @@ When an API route returns a 401 or 403 status code, the normal error-handler eve
 
 ### Methods
 
-#### <a name="method-setHeaders"></a>`setHeaders( headers )`
+#### <a name="method-extendHeaders"></a>`extendHeaders( headers )`
 
 Will extend the existing headers object, which contains the authorization key.
 
 ##### Arguments
 
 1. `headers` | *Object* | used as the `headers` parameter in the `$http` request
-
-* * *
-
-#### <a name="method-setRootPath"></a>`setRootPath( path )`
-
-Will prepend all API requests with the supplied string.
-
-##### Arguments
-
-1. `path` | *String* | fragment to prepend
-
-* * *
-
-
-## <a name="section-interface"></a>Interface
-
-The following methods can be called on the `API` service once injected into your Angular code.
-
-* [setKey( key )](#method-setKey)
-* [getKey()](#method-getKey)
-* [queryUrl( path, requestData )](#method-queryUrl)
-* [$get( path [, requestData ] )](#method-get)
-* [$post( path, requestData )](#method-post)
-* [$postFile( path, requestData )](#method-postFile)
-* [$put( path, requestData )](#method-put)
-* [$patch( path, requestData )](#method-patch)
-* [$delete( path )](#method-delete)
-
-[Promise for HTTP Alias Methods](#promise-return)
 
 * * *
 
@@ -105,6 +145,23 @@ Returns the current value of API key.
 ##### Returns
 
 *String* | the API key
+
+* * *
+
+
+## <a name="section-interface"></a>HTTP Interface
+
+The following methods can be called on an instantiated `API` service once it has been injected into your Angular code.
+
+* [queryUrl( path, requestData )](#method-queryUrl)
+* [$get( path [, requestData ] )](#method-get)
+* [$post( path, requestData )](#method-post)
+* [$postFile( path, requestData )](#method-postFile)
+* [$put( path, requestData )](#method-put)
+* [$patch( path, requestData )](#method-patch)
+* [$delete( path )](#method-delete)
+
+[Promise for HTTP Alias Methods](#promise-return)
 
 * * *
 
