@@ -56,7 +56,6 @@ angular.module( "vokal.Facebook", [ vokal.API ] )
 ] );
 ```
 
-
 The following properties can be set directly or via the constructor config object:
 
 * [globalHeaders](#prop-globalHeaders)
