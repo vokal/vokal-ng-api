@@ -1,6 +1,8 @@
 # vokal-ng-api
 
-> Vokal's common Angular API service. Wraps Angular's `$http` service.
+Vokal's common Angular API service. Wraps Angular's `$http` service.
+
+> Maintained by @Tathanen
 
 * [Configuration & Usage](#section-config-usage)
 * [HTTP Interface](#section-interface)
