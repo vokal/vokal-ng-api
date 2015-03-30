@@ -35,11 +35,11 @@ var Facebook = new API( {
 You can instantiate the service on the fly for single usage, but the recommended pattern is to create a dedicated service that returns a pre-configured instance.
 
 ```javascript
-angular.module( "vokal.Facebook", [ vokal.API ] )
+angular.module( "vokal.Facebook", [ "vokal.API" ] )
 
 .factory( "Facebook", [ "API",
 
-    function ()
+    function ( API )
     {
         "use strict";
 
