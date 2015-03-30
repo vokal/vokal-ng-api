@@ -8,13 +8,7 @@ describe( "API without Humps", function ()
 
     beforeEach( function ()
     {
-        var mockModule = angular.module( "test.vokal.API", function () {} );
-        mockModule.config( function ( APIProvider )
-        {
-            APIProvider.transformHumps = false;
-        } );
-
-        module( "vokal.API", "test.vokal.API" );
+        module( "vokal.API" );
 
         inject( function ( $injector )
         {
@@ -41,8 +35,9 @@ describe( "API without Humps", function ()
     it( "should not transform requests", function ()
     {
         var result;
+        var testAPI = new API( { transformHumps: false } );
 
-        API.$post( noHumpsUrl, { someValue: "value" } )
+        testAPI.$post( noHumpsUrl, { someValue: "value" } )
 
             .then( function ( obj )
             {
