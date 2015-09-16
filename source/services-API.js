@@ -224,27 +224,19 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                     if( status === 401 || status === 403 )
                     {
                         $rootScope.$broadcast( "APIRequestUnauthorized", options, data, status );
-
                         // By default, prevent resolutions for unauthorized requests to facilitate clean redirects
-                        if( !that.unauthorizedInterrupt )
+                        if( that.unauthorizedInterrupt )
                         {
-                            $rootScope.$broadcast( "APIRequestError", options, data, status );
-                            defer.reject( {
-                                data:    data,
-                                options: options,
-                                status:  status
-                            } );
+                            return;
                         }
                     }
-                    else
-                    {
-                        $rootScope.$broadcast( "APIRequestError", options, data, status );
-                        defer.reject( {
-                            data:    data,
-                            options: options,
-                            status:  status
-                        } );
-                    }
+
+                    $rootScope.$broadcast( "APIRequestError", options, data, status );
+                    defer.reject( {
+                        data:    data,
+                        options: options,
+                        status:  status
+                    } );
 
                 } );
 
