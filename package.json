@@ -16,7 +16,7 @@
     "url": "http://github.com/vokal/vokal-ng-api"
   },
   "scripts": {
-    "test": "grunt uglify && node ./node_modules/karma/bin/karma start tests/karma.conf.js"
+    "test": "grunt && node ./node_modules/karma/bin/karma start tests/karma.conf.js"
   },
   "license": "MIT",
   "devDependencies": {
