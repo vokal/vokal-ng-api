@@ -1,6 +1,5 @@
 language: node_js
 node_js:
   - "node"
-env:
-  global:
-    - NODE_ENV=travisci
+before_script:
+  - npm install grunt-cli -g
