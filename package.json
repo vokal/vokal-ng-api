@@ -1,21 +1,20 @@
 {
   "name": "vokal-ng-api",
-  "version": "2.1.0",
   "description": "Vokal's API Service",
-  "homepage": "http://github.com/vokalinteractive/vokal-ng-api",
+  "homepage": "http://github.com/vokal/vokal-ng-api",
   "bugs": {
-    "url": "http://github.com/vokalinteractive/vokal-ng-api/issues"
+    "url": "http://github.com/vokal/vokal-ng-api/issues"
   },
   "authors": [
     {
-      "name": "VOKAL Interactive",
-      "email": "webdevelopers@vokalinteractive.com"
+      "name": "Vokal",
+      "email": "webdevelopers@vokal.io"
     }
   ],
   "private": true,
   "repository": {
     "type": "git",
-    "url": "http://github.com/vokalinteractive/vokal-ng-api"
+    "url": "http://github.com/vokal/vokal-ng-api"
   },
   "scripts": {
     "test": "node ./node_modules/karma/bin/karma start tests/karma.conf.js"
