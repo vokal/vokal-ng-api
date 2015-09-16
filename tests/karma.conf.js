@@ -16,8 +16,8 @@ module.exports = function ( config )
             "karma-coverage"
         ],
         preprocessors: {
-            "services_API.js": [ "coverage" ],
-            "services_humps.js": [ "coverage" ]
+            "source/services-API.js": [ "coverage" ],
+            "source/services-humps.js": [ "coverage" ]
         },
         coverageReporter: {
             dir : "coverage/",
@@ -30,8 +30,8 @@ module.exports = function ( config )
             "source/components/angular-mocks/angular-mocks.js",
             "source/components/humps/humps.js",
 
-            "services_API.js",
-            "services_humps.js",
+            "source/services-API.js",
+            "source/services-humps.js",
 
             "tests/*.spec.js"
         ]
