@@ -11,7 +11,7 @@
   "main": "dist/vokal-ng-api.min.js",
   "license": "MIT",
   "dependencies": {
-    "humps": "https://github.com/domchristie/humps.git"
+    "humps": "https://github.com/domchristie/humps.git#1.x"
   },
   "devDependencies": {
     "angular": "1.3.x",
