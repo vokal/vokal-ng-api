@@ -349,10 +349,10 @@ angular.module( "vokal.Humps", [] )
             {
                 if( typeof( value ) === "string" )
                 {
-                    return JSON.stringify( humps.decamelizeKeys( JSON.parse( value ), "_" ) );
+                    return JSON.stringify( humps.decamelizeKeys( JSON.parse( value ), { separator: "_" } ) );
                 }
 
-                return humps.decamelizeKeys( value, "_" );
+                return humps.decamelizeKeys( value, { separator: "_" } );
 
             } ) );
         };
