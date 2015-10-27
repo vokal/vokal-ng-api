@@ -1,7 +1,7 @@
 {
   "name": "vokal-ng-api",
   "description": "Vokal's API Service",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "main": "dist/vokal-ng-api.min.js",
   "homepage": "http://github.com/vokal/vokal-ng-api",
   "bugs": {
@@ -21,6 +21,9 @@
     "test": "grunt && node ./node_modules/karma/bin/karma start tests/karma.conf.js"
   },
   "license": "MIT",
+  "dependencies": {
+    "humps": "^1.0.0"
+  },
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-uglify": "^0.9.0",
