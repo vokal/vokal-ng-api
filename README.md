@@ -166,7 +166,7 @@ The following methods can be called on an instantiated `API` service once it has
 
 * * *
 
-#### <a id="method-queryUrl"></a>`queryUrl( path, requestData )`
+#### <a id="method-queryUrl"></a>`queryUrl( path, requestData, options )`
 
 Builds a URL from a base path and an object of parameters. This is the method used by `$get`.
 
@@ -174,6 +174,8 @@ Builds a URL from a base path and an object of parameters. This is the method us
 
 1. `path` | *String* | an API route
 2. `requestData` | *Object* | an object that will be serialized into a query string
+3. `options` | *Object* | options object
+ * `transformHumps` | *Boolean* | Default: `false` whether to apply decamelize
 
 ##### Returns
 
