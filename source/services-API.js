@@ -100,7 +100,12 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             }
 
             requestData = angular.extend( {}, getQueryData( path ), requestData || {} );
-            path        = path.split( "?" )[ 0 ];
+            if( this.transformHumps )
+            {
+                requestData = humps.decamelizeKeys( requestData, { separator: "_" } );
+            }
+
+            path = path.split( "?" )[ 0 ];
 
             var keys       = Object.keys( requestData );
             var queryParts = [];

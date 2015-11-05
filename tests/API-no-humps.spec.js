@@ -50,6 +50,14 @@ describe( "API without Humps", function ()
         expect( result.some_value ).toBeUndefined();
     } );
 
+    it( "should create querystrings", function ()
+    {
+        var testAPI = new API( { transformHumps: false } );
+
+        expect( testAPI.queryUrl( "/the/path/?someValue=a", { anotherValue: 1 } ) )
+            .toEqual( "/the/path/?someValue=a&anotherValue=1" );
+    } );
+
     afterEach( function ()
     {
         $httpBackend.verifyNoOutstandingExpectation();

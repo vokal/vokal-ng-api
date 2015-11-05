@@ -116,7 +116,12 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             }
 
             requestData = angular.extend( {}, getQueryData( path ), requestData || {} );
-            path        = path.split( "?" )[ 0 ];
+            if( this.transformHumps )
+            {
+                requestData = humps.decamelizeKeys( requestData, { separator: "_" } );
+            }
+
+            path = path.split( "?" )[ 0 ];
 
             var keys       = Object.keys( requestData );
             var queryParts = [];
@@ -336,16 +341,15 @@ angular.module( "vokal.Humps", [] )
 
         this.responseToCamel = function ( defaultTransforms )
         {
-            return ( safeConcat( defaultTransforms, function( value )
+            return ( safeConcat( defaultTransforms, function ( value )
             {
                 return humps.camelizeKeys( value );
-
             } ) );
         };
 
         this.requestToSnake = function ( defaultTransforms )
         {
-            return ( safeConcat( defaultTransforms, function( value )
+            return ( safeConcat( defaultTransforms, function ( value )
             {
                 if( typeof( value ) === "string" )
                 {
@@ -353,7 +357,6 @@ angular.module( "vokal.Humps", [] )
                 }
 
                 return humps.decamelizeKeys( value, { separator: "_" } );
-
             } ) );
         };
 
