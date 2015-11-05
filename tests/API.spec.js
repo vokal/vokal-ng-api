@@ -106,7 +106,7 @@ describe( "API with Humps", function ()
         expect( flag ).toBe( "Success" );
     } );
 
-    it( "should transform post requests", function ()
+    it( "should transform POST requests", function ()
     {
         var result;
         var testAPI = new API();
