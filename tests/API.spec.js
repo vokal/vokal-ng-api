@@ -106,7 +106,7 @@ describe( "API with Humps", function ()
         expect( flag ).toBe( "Success" );
     } );
 
-    it( "should transform requests", function ()
+    it( "should transform post requests", function ()
     {
         var result;
         var testAPI = new API();
@@ -210,6 +210,9 @@ describe( "API with Humps", function ()
 
         expect( testAPI.queryUrl( "/the/path/", { key: [ 1, "'", '"', "&", "=", "?", false ] } ) )
             .toEqual( "/the/path/?key=[1,\"'\",\"\\\"\",\"%26\",\"%3D\",\"%3F\",false]" );
+
+        expect( testAPI.queryUrl( "/the/path/?someValue=a", { anotherValue: 1 } ) )
+            .toEqual( "/the/path/?some_value=a&another_value=1" );
     } );
 
 

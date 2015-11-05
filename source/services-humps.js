@@ -16,16 +16,15 @@ angular.module( "vokal.Humps", [] )
 
         this.responseToCamel = function ( defaultTransforms )
         {
-            return ( safeConcat( defaultTransforms, function( value )
+            return ( safeConcat( defaultTransforms, function ( value )
             {
                 return humps.camelizeKeys( value );
-
             } ) );
         };
 
         this.requestToSnake = function ( defaultTransforms )
         {
-            return ( safeConcat( defaultTransforms, function( value )
+            return ( safeConcat( defaultTransforms, function ( value )
             {
                 if( typeof( value ) === "string" )
                 {
@@ -33,7 +32,6 @@ angular.module( "vokal.Humps", [] )
                 }
 
                 return humps.decamelizeKeys( value, { separator: "_" } );
-
             } ) );
         };
 
