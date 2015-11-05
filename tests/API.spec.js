@@ -211,7 +211,7 @@ describe( "API with Humps", function ()
         expect( testAPI.queryUrl( "/the/path/", { key: [ 1, "'", '"', "&", "=", "?", false ] } ) )
             .toEqual( "/the/path/?key=[1,\"'\",\"\\\"\",\"%26\",\"%3D\",\"%3F\",false]" );
 
-        expect( testAPI.queryUrl( "/the/path/?someValue=a", { anotherValue: 1 } ) )
+        expect( testAPI.queryUrl( "/the/path/?someValue=a", { anotherValue: 1 }, { transformHumps: true } ) )
             .toEqual( "/the/path/?some_value=a&another_value=1" );
     } );
 

@@ -52,10 +52,10 @@ describe( "API without Humps", function ()
 
     it( "should create querystrings", function ()
     {
-        var testAPI = new API( { transformHumps: false } );
+        var testAPI = new API();
 
         expect( testAPI.queryUrl( "/the/path/?someValue=a", { anotherValue: 1 } ) )
-            .toEqual( "/the/path/?someValue=a&anotherValue=1" );
+            .toEqual( "/the/path/?someValue=a&anotherValue=1", { transformHumps: false } );
     } );
 
     afterEach( function ()
