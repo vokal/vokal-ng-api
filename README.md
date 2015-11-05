@@ -154,7 +154,7 @@ Returns the current value of API key.
 
 The following methods can be called on an instantiated `API` service once it has been injected into your Angular code.
 
-* [queryUrl( path, requestData )](#method-queryUrl)
+* [queryUrl( path, requestData [, options ] )](#method-queryUrl)
 * [$get( path [, requestData ] )](#method-get)
 * [$post( path, requestData )](#method-post)
 * [$postFile( path, requestData )](#method-postFile)
