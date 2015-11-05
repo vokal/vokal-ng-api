@@ -92,7 +92,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         };
 
         // Build a URL query string based on an object
-        var queryUrl = function ( path, requestData )
+        var queryUrl = function ( path, requestData, options )
         {
             if( !angular.isObject( requestData ) )
             {
@@ -100,7 +100,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             }
 
             requestData = angular.extend( {}, getQueryData( path ), requestData || {} );
-            if( this.transformHumps )
+            if( options && options.transformHumps )
             {
                 requestData = humps.decamelizeKeys( requestData, { separator: "_" } );
             }
@@ -278,7 +278,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         // Request aliases
         apiConstruct.prototype.$get = function ( path, requestData )
         {
-            return this.apiRequest( "get", queryUrl( path, requestData ) );
+            return this.apiRequest( "get", queryUrl( path, requestData, { transformHumps: this.transformHumps } ) );
         };
         apiConstruct.prototype.$post = function ( path, requestData )
         {
