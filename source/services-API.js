@@ -171,7 +171,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         };
         apiConstruct.prototype.setKey = function ( key )
         {
-            this.globalHeaders.AUTHORIZATION = String( key );
+            this.globalHeaders.AUTHORIZATION = key ? String( key ) : "";
         };
         apiConstruct.prototype.getKey = function ()
         {

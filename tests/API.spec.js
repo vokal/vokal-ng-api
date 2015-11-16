@@ -141,6 +141,16 @@ describe( "API with Humps", function ()
 
     } );
 
+    it( "should not interpret null value key as a string", function ()
+    {
+        var Test1 = new API();
+        Test1.setKey( "1" );
+        expect( Test1.getKey() ).toBe( "1" );
+
+        Test1.setKey( null );
+        expect( Test1.getKey() ).toBe( "" );
+    } );
+
     it( "should have defaults", function ()
     {
         var testAPI = new API();
