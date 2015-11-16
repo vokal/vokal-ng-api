@@ -188,7 +188,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         apiConstruct.prototype.setKey = function ( key )
         {
             this.globalHeaders.AUTHORIZATION = typeof( key ) === "string" ? key : "";
-            if( key && typeof( key ) !== "string" )
+            if( typeof( key ) !== "string" && typeof( key ) !== "undefined" && key !== null )
             {
                 console.warn( "setKey( key ) only accepts a String for parameter key" );
             }
