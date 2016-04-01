@@ -7,12 +7,14 @@ describe( "API with Humps", function ()
     var humpsUrl   = "/humps";
     var noHumpsUrl = "/no-humps";
     var $httpBackend;
+    var $rootScope;
 
     beforeEach( module( "vokal.API" ) );
     beforeEach( inject( function ( $injector )
     {
         API          = $injector.get( "API" );
         $httpBackend = $injector.get( "$httpBackend" );
+        $rootScope   = $injector.get( "$rootScope" );
 
         $httpBackend.when( "GET", url ).respond( "Value" );
         $httpBackend.when( "POST", url ).respond( "Success" );
@@ -141,6 +143,22 @@ describe( "API with Humps", function ()
 
     } );
 
+    it( "should expose the name to event listeners", function ()
+    {
+        var testAPI = new API( {
+            name: "testName"
+        } );
+
+        $rootScope.$on( "APIRequestStart", function ( event, options )
+        {
+            expect( options.ngName ).toBe( "testName" );
+        } );
+
+        testAPI.$post( url, { someValue: "value" } );
+
+        $httpBackend.flush();
+    } );
+
     it( "should only allow keys to be a string", function ()
     {
         var Test1 = new API();
@@ -165,6 +183,7 @@ describe( "API with Humps", function ()
         var testAPI = new API();
 
         expect( testAPI.getKey() ).toBeUndefined();
+        expect( testAPI.name ).toBe( "" );
         expect( testAPI.rootPath ).toBe( "" );
         expect( testAPI.transformHumps ).toBe( true );
         expect( testAPI.cancelOnRouteChange ).toBe( false );
@@ -175,6 +194,7 @@ describe( "API with Humps", function ()
     it( "should be configurable at instantiation", function ()
     {
         var testAPI = new API( {
+            name: "testAPI",
             globalHeaders: { AUTHORIZATION: "theKey", customHeader: "custom" },
             rootPath: "/api/v1/",
             transformHumps: false,
@@ -183,6 +203,7 @@ describe( "API with Humps", function ()
             customField: "lala"
         } );
 
+        expect( testAPI.name ).toBe( "testAPI" );
         expect( testAPI.getKey() ).toBe( "theKey" );
         expect( testAPI.globalHeaders.customHeader ).toBe( "custom" );
         expect( testAPI.rootPath ).toBe( "/api/v1/" );
