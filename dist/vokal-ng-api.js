@@ -150,6 +150,10 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             // Initialize parameters
             if( config )
             {
+                if( typeof config.alias !== "undefined" )
+                {
+                    this.alias = config.alias;
+                }
                 if( typeof config.globalHeaders !== "undefined" )
                 {
                     this.globalHeaders = angular.copy( config.globalHeaders );
@@ -175,6 +179,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         };
 
         // Define interface
+        apiConstruct.prototype.alias                 = "";
         apiConstruct.prototype.globalHeaders         = {};
         apiConstruct.prototype.rootPath              = "";
         apiConstruct.prototype.transformHumps        = true;
@@ -211,7 +216,8 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 url:     this.rootPath + path,
                 headers: this.globalHeaders,
                 data:    requestData || {},
-                timeout: defer.promise
+                timeout: defer.promise,
+                ngAlias: this.alias
             };
 
             if( method === "postFile" )
