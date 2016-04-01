@@ -143,15 +143,15 @@ describe( "API with Humps", function ()
 
     } );
 
-    it( "should expose the alias to event listeners", function ()
+    it( "should expose the name to event listeners", function ()
     {
         var testAPI = new API( {
-            alias: "testAlias"
+            name: "testName"
         } );
 
         $rootScope.$on( "APIRequestStart", function ( event, options )
         {
-            expect( options.ngAlias ).toBe( "testAlias" );
+            expect( options.ngName ).toBe( "testName" );
         } );
 
         testAPI.$post( url, { someValue: "value" } );
@@ -183,7 +183,7 @@ describe( "API with Humps", function ()
         var testAPI = new API();
 
         expect( testAPI.getKey() ).toBeUndefined();
-        expect( testAPI.alias ).toBe( "" );
+        expect( testAPI.name ).toBe( "" );
         expect( testAPI.rootPath ).toBe( "" );
         expect( testAPI.transformHumps ).toBe( true );
         expect( testAPI.cancelOnRouteChange ).toBe( false );
@@ -194,7 +194,7 @@ describe( "API with Humps", function ()
     it( "should be configurable at instantiation", function ()
     {
         var testAPI = new API( {
-            alias: "testAPI",
+            name: "testAPI",
             globalHeaders: { AUTHORIZATION: "theKey", customHeader: "custom" },
             rootPath: "/api/v1/",
             transformHumps: false,
@@ -203,7 +203,7 @@ describe( "API with Humps", function ()
             customField: "lala"
         } );
 
-        expect( testAPI.alias ).toBe( "testAPI" );
+        expect( testAPI.name ).toBe( "testAPI" );
         expect( testAPI.getKey() ).toBe( "theKey" );
         expect( testAPI.globalHeaders.customHeader ).toBe( "custom" );
         expect( testAPI.rootPath ).toBe( "/api/v1/" );
