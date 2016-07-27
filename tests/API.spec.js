@@ -188,7 +188,7 @@ describe( "API with Humps", function ()
         expect( testAPI.transformHumps ).toBe( true );
         expect( testAPI.cancelOnRouteChange ).toBe( false );
         expect( testAPI.unauthorizedInterrupt ).toBe( true );
-        expect( testAPI.loginPath ).toBe( true );
+        expect( testAPI.loginPath ).toBe( null );
 
     } );
 

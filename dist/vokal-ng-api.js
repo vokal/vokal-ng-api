@@ -216,7 +216,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         apiConstruct.prototype.transformHumps        = true;
         apiConstruct.prototype.cancelOnRouteChange   = false;
         apiConstruct.prototype.unauthorizedInterrupt = true;
-        apiConstruct.prototype.loginPath             = "";
+        apiConstruct.prototype.loginPath             = null;
 
         apiConstruct.prototype.extendHeaders = function ( headers )
         {
@@ -308,7 +308,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                                 promiseQueue.push( defer );
 
                                 // Attempt to resolve authorization issue with user-supplied function
-                                that.unauthorizedInterrupt().then( function ()
+                                that.unauthorizedInterrupt( data, options, status ).then( function ()
                                 {
                                     // Authorization was resolved, so re-make queued requests without interruption
                                     flushing = true;

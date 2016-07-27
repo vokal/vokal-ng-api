@@ -26,9 +26,9 @@ module.exports = function ( config )
             ]
         },
         files: [
-            "source/components/angular/angular.js",
-            "source/components/angular-mocks/angular-mocks.js",
-            "source/components/humps/humps.js",
+            "node_modules/angular/angular.js",
+            "node_modules/angular-mocks/angular-mocks.js",
+            "node_modules/humps/humps.js",
 
             "source/services-API.js",
             "source/services-humps.js",

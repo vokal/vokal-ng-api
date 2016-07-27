@@ -13,10 +13,6 @@
   "dependencies": {
     "humps": "https://github.com/domchristie/humps.git#1.x"
   },
-  "devDependencies": {
-    "angular": "1.5.x",
-    "angular-mocks": "1.5.x"
-  },
   "ignore": [
     "tests/",
     "Gruntfile.js",

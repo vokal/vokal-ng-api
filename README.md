@@ -388,7 +388,7 @@ Broadcast upon the erroneous completion of any API request.
 
 #### <a id="event-APIRequestUnauthorized"></a>`APIRequestUnauthorized`
 
-Broadcast upon the unauthorized (status codes `401`) completion of any API request.
+Broadcast upon the unauthorized (status code `401`) completion of any API request.
 
 ##### Listener Arguments
 
