@@ -144,7 +144,7 @@ apiService.unauthorizedInterrupt = function ( data, options, status )
 
 #### <a id="prop-loginPath"></a>`loginPath`
 
-*String* | Default: `""`
+*String* | Default: `null`
 
 Redirecting to a login page is outside of the scope of this service's intended function, but you can provide your login path to make sure that the `401`-handling functions of this service (`unauthorizedInterrupt` & `APIRequestUnauthorized`) do not activate when making requests on the login page.  The supplied path will be compared to the value of `$location.path()`.
 

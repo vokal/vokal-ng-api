@@ -200,7 +200,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         apiConstruct.prototype.transformHumps        = true;
         apiConstruct.prototype.cancelOnRouteChange   = false;
         apiConstruct.prototype.unauthorizedInterrupt = true;
-        apiConstruct.prototype.loginPath             = "";
+        apiConstruct.prototype.loginPath             = null;
 
         apiConstruct.prototype.extendHeaders = function ( headers )
         {
