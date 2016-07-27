@@ -14,8 +14,8 @@
     "humps": "https://github.com/domchristie/humps.git#1.x"
   },
   "devDependencies": {
-    "angular": "1.4.x",
-    "angular-mocks": "1.4.x"
+    "angular": "1.5.x",
+    "angular-mocks": "1.5.x"
   },
   "ignore": [
     "tests/",

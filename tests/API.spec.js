@@ -188,6 +188,7 @@ describe( "API with Humps", function ()
         expect( testAPI.transformHumps ).toBe( true );
         expect( testAPI.cancelOnRouteChange ).toBe( false );
         expect( testAPI.unauthorizedInterrupt ).toBe( true );
+        expect( testAPI.loginPath ).toBe( true );
 
     } );
 
@@ -200,6 +201,7 @@ describe( "API with Humps", function ()
             transformHumps: false,
             cancelOnRouteChange: true,
             unauthorizedInterrupt: false,
+            loginPath: "/login",
             customField: "lala"
         } );
 
@@ -210,6 +212,7 @@ describe( "API with Humps", function ()
         expect( testAPI.transformHumps ).toBe( false );
         expect( testAPI.cancelOnRouteChange ).toBe( true );
         expect( testAPI.unauthorizedInterrupt ).toBe( false );
+        expect( testAPI.loginPath ).toBe( "/login" );
         expect( testAPI.customField ).toBeUndefined();
 
     } );
