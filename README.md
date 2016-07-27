@@ -127,6 +127,19 @@ When a request on a non-login page returns a `401` status code, the normal error
 
 When a function is supplied for this value, it should be used as an attempt to resolve the authorization issue.  For example, an expired token could be exchanged for a fresh one, and re-added to the service via `setKey()`.  This function should return a promise that is resolved or rejected depending upon whether or not it was successful in resolving the authorization issue.  If resolved, the original API request will be re-run, along with any other authorization-failing API requests that had been held in a queue while the resolution was being attempted.  If rejected, the `APIAuthorizationFailure` event will be broadcast, along with an optional message sent from the function.
 
+The function will have access to the `data`, `options`, and `status` values from the initial unauthorized request, as defined in the [Promise for HTTP Alias Methods](#promise-return).
+
+```javascript
+apiService.unauthorizedInterrupt = function ( data, options, status )
+{
+    var deferred = $q.defer();
+
+    // TODO: Attempt to resolve authorization issue, then resolve() or reject() promise
+
+    return deferred.promise;
+};
+```
+
 * * *
 
 #### <a id="prop-loginPath"></a>`loginPath`

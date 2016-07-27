@@ -292,7 +292,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                                 promiseQueue.push( defer );
 
                                 // Attempt to resolve authorization issue with user-supplied function
-                                that.unauthorizedInterrupt().then( function ()
+                                that.unauthorizedInterrupt( data, options, status ).then( function ()
                                 {
                                     // Authorization was resolved, so re-make queued requests without interruption
                                     flushing = true;
