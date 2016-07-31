@@ -294,6 +294,8 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                                     {
                                         // Authorization was rejected, so broadcast failure event
                                         interrupting = false;
+                                        requestQueue = [];
+                                        promiseQueue = [];
                                         $rootScope.$broadcast( "APIAuthorizationFailure", failure || "" );
                                     } );
 
