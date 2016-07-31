@@ -297,6 +297,8 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                                         {
                                             flushing     = false;
                                             interrupting = false;
+                                            requestQueue = [];
+                                            promiseQueue = [];
                                         } );
 
                                         for( var i = 0; i < requestQueue.length; i++ )

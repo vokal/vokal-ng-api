@@ -3,11 +3,10 @@ describe( "API with Humps", function ()
     "use strict";
 
     var API;
-    var url         = "/api/endpoint";
-    var authUrlGood = "/api/auth/error/good";
-    var authUrlBad  = "/api/auth/error/bad";
-    var humpsUrl    = "/humps";
-    var noHumpsUrl  = "/no-humps";
+    var url        = "/api/endpoint";
+    var authUrl    = "/api/auth/error/good";
+    var humpsUrl   = "/humps";
+    var noHumpsUrl = "/no-humps";
     var $httpBackend;
     var $rootScope;
     var $timeout;
@@ -25,7 +24,7 @@ describe( "API with Humps", function ()
         $httpBackend.when( "GET", url ).respond( "Value" );
         $httpBackend.when( "POST", url ).respond( "Success" );
 
-        $httpBackend.when( "GET", authUrlGood )
+        $httpBackend.when( "GET", authUrl )
 
             .respond( function ( method, url, data, headers )
             {
@@ -42,36 +41,6 @@ describe( "API with Humps", function ()
                     return [
                         200,
                         "success",
-                        {}
-                    ];
-                }
-                else
-                {
-                    return [
-                        400,
-                        "failure",
-                        {}
-                    ];
-                }
-            } );
-
-        $httpBackend.when( "GET", authUrlBad )
-
-            .respond( function ( method, url, data, headers )
-            {
-                if( headers.AUTHORIZATION === "bad" )
-                {
-                    return [
-                        401,
-                        { error: "unauthorized" },
-                        {}
-                    ];
-                }
-                else if( headers.AUTHORIZATION === "good" )
-                {
-                    return [
-                        400,
-                        "error",
                         {}
                     ];
                 }
@@ -242,7 +211,7 @@ describe( "API with Humps", function ()
 
         testAPI.setKey( "bad" );
 
-        testAPI.$get( authUrlGood ).then( function ( response )
+        testAPI.$get( authUrl ).then( function ( response )
         {
             result = response.data;
         } );
@@ -269,7 +238,7 @@ describe( "API with Humps", function ()
         } );
 
         testAPI.setKey( "bad" );
-        testAPI.$get( authUrlGood );
+        testAPI.$get( authUrl );
 
         $rootScope.$on( "APIAuthorizationFailure", function ( event, message )
         {
