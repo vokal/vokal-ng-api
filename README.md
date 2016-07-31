@@ -194,6 +194,7 @@ The following methods can be called on an instantiated `API` service once it has
 * [$put( path, requestData )](#method-put)
 * [$patch( path, requestData )](#method-patch)
 * [$delete( path )](#method-delete)
+* [repeatRequest( request )](#method-repeatRequest)
 
 [Promise for HTTP Alias Methods](#promise-return)
 
@@ -302,6 +303,20 @@ Performs an HTTP `DELETE` request on the supplied API route.
 ##### Returns
 
 *Object* | see [Promise for HTTP Alias Methods](#promise-return)
+
+* * *
+
+#### <a id="method-repeatRequest"></a>`repeatRequest( request )`
+
+Performs a request and resolves/rejects a promise. This is the method used to repeat requests with authentication issues via `unauthorizedInterrupt`.
+
+##### Arguments
+
+1. `request` | *Object* | contains request specifications and the promise to resolve/reject
+ * `method` | *String* | HTTP method, ex. GET, POST, etc.
+ * `path` | *String* | the path of the request being repeated
+ * `requestData` | *Object* | the body of the request being repeated
+ * `promise` | *Promise* | the promise returned by the request being repeated
 
 * * *
 

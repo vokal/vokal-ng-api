@@ -3,11 +3,15 @@ describe( "API with Humps", function ()
     "use strict";
 
     var API;
-    var url        = "/api/endpoint";
-    var humpsUrl   = "/humps";
-    var noHumpsUrl = "/no-humps";
+    var url         = "/api/endpoint";
+    var authUrlGood = "/api/auth/error/good";
+    var authUrlBad  = "/api/auth/error/bad";
+    var humpsUrl    = "/humps";
+    var noHumpsUrl  = "/no-humps";
     var $httpBackend;
     var $rootScope;
+    var $timeout;
+    var $q;
 
     beforeEach( module( "vokal.API" ) );
     beforeEach( inject( function ( $injector )
@@ -15,15 +19,77 @@ describe( "API with Humps", function ()
         API          = $injector.get( "API" );
         $httpBackend = $injector.get( "$httpBackend" );
         $rootScope   = $injector.get( "$rootScope" );
+        $timeout     = $injector.get( "$timeout" );
+        $q           = $injector.get( "$q" );
 
         $httpBackend.when( "GET", url ).respond( "Value" );
         $httpBackend.when( "POST", url ).respond( "Success" );
+
+        $httpBackend.when( "GET", authUrlGood )
+
+            .respond( function ( method, url, data, headers )
+            {
+                if( headers.AUTHORIZATION === "bad" )
+                {
+                    return [
+                        401,
+                        { error: "unauthorized" },
+                        {}
+                    ];
+                }
+                else if( headers.AUTHORIZATION === "good" )
+                {
+                    return [
+                        200,
+                        "success",
+                        {}
+                    ];
+                }
+                else
+                {
+                    return [
+                        400,
+                        "failure",
+                        {}
+                    ];
+                }
+            } );
+
+        $httpBackend.when( "GET", authUrlBad )
+
+            .respond( function ( method, url, data, headers )
+            {
+                if( headers.AUTHORIZATION === "bad" )
+                {
+                    return [
+                        401,
+                        { error: "unauthorized" },
+                        {}
+                    ];
+                }
+                else if( headers.AUTHORIZATION === "good" )
+                {
+                    return [
+                        400,
+                        "error",
+                        {}
+                    ];
+                }
+                else
+                {
+                    return [
+                        400,
+                        "failure",
+                        {}
+                    ];
+                }
+            } );
 
         $httpBackend.when( "POST", humpsUrl )
 
             .respond( function ( method, url, data )
             {
-                var obj = angular.fromJson ( data );
+                var obj = angular.fromJson( data );
 
                 return [
                     201,
@@ -36,7 +102,7 @@ describe( "API with Humps", function ()
 
             .respond( function ( method, url, data )
             {
-                var obj = angular.fromJson ( data );
+                var obj = angular.fromJson( data );
 
                 return [
                     201,
@@ -145,18 +211,71 @@ describe( "API with Humps", function ()
 
     it( "should expose the name to event listeners", function ()
     {
+        var result;
         var testAPI = new API( {
             name: "testName"
         } );
 
         $rootScope.$on( "APIRequestStart", function ( event, options )
         {
-            expect( options.ngName ).toBe( "testName" );
+            result = options.ngName;
         } );
 
         testAPI.$post( url, { someValue: "value" } );
 
         $httpBackend.flush();
+        expect( result ).toBe( "testName" );
+    } );
+
+    it( "should allow resolution of authorization issues", function ()
+    {
+        var result;
+        var testAPI = new API( {
+            unauthorizedInterrupt: function ()
+            {
+                var deferred = $q.defer();
+                testAPI.setKey( "good" );
+                deferred.resolve();
+                return deferred.promise;
+            }
+        } );
+
+        testAPI.setKey( "bad" );
+
+        testAPI.$get( authUrlGood ).then( function ( response )
+        {
+            result = response.data;
+        } );
+
+        $httpBackend.flush();
+        expect( result ).toBe( "success" );
+
+    } );
+
+    it( "should broadcast on a failed attempt to resolve an authorization issue", function ()
+    {
+        var result;
+        var testAPI = new API( {
+            unauthorizedInterrupt: function ( data )
+            {
+                var deferred = $q.defer();
+                deferred.reject( data.error );
+                return deferred.promise;
+            },
+            name: "test"
+        } );
+
+        testAPI.setKey( "bad" );
+        testAPI.$get( authUrlGood );
+
+        $rootScope.$on( "APIAuthorizationFailure", function ( event, message )
+        {
+            result = message;
+        } );
+
+        $httpBackend.flush();
+        expect( result ).toBe( "unauthorized" );
+
     } );
 
     it( "should only allow keys to be a string", function ()

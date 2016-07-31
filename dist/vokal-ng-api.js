@@ -187,28 +187,6 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
         };
 
-        var repeatRequest = function ( request )
-        {
-            apiConstruct.prototype.apiRequest( request.method, request.path, request.requestData )
-
-                .then( function ( response )
-                {
-                    request.promise.resolve( {
-                        data:    response.data,
-                        options: response.options,
-                        status:  response.status
-                    } );
-                },
-                function ( response )
-                {
-                    request.promise.reject( {
-                        data:    response.data,
-                        options: response.options,
-                        status:  response.status
-                    } );
-                } );
-        };
-
         // Define interface
         apiConstruct.prototype.name                  = "";
         apiConstruct.prototype.globalHeaders         = {};
@@ -300,10 +278,10 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                                 interrupting = true;
 
                                 requestQueue.push( {
-                                    promise:     defer,
                                     method:      method,
                                     path:        path,
-                                    requestData: requestData
+                                    requestData: requestData,
+                                    promise:     defer
                                 } );
                                 promiseQueue.push( defer );
 
@@ -321,7 +299,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
                                     for( var i = 0; i < requestQueue.length; i++ )
                                     {
-                                        repeatRequest( requestQueue[ i ] );
+                                        that.repeatRequest( requestQueue[ i ] );
                                     }
                                 },
                                 function ( failure )
@@ -339,21 +317,21 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                             if( flushing )
                             {
                                 // If queued requests are already being re-run, re-run this one
-                                repeatRequest( {
-                                    promise:     defer,
+                                that.repeatRequest( {
                                     method:      method,
                                     path:        path,
-                                    requestData: requestData
+                                    requestData: requestData,
+                                    promise:     defer
                                 } );
                             }
                             else
                             {
                                 // Queue this request while the authorization issue is being resolved
                                 requestQueue.push( {
-                                    promise:     defer,
                                     method:      method,
                                     path:        path,
-                                    requestData: requestData
+                                    requestData: requestData,
+                                    promise:     defer
                                 } );
                                 promiseQueue.push( defer );
                             }
@@ -423,6 +401,28 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         apiConstruct.prototype.$delete = function ( path )
         {
             return this.apiRequest( "delete", path );
+        };
+
+        apiConstruct.prototype.repeatRequest = function ( request )
+        {
+            this.apiRequest( request.method, request.path, request.requestData )
+
+                .then( function ( response )
+                {
+                    request.promise.resolve( {
+                        data:    response.data,
+                        options: response.options,
+                        status:  response.status
+                    } );
+                },
+                function ( response )
+                {
+                    request.promise.reject( {
+                        data:    response.data,
+                        options: response.options,
+                        status:  response.status
+                    } );
+                } );
         };
 
         return apiConstruct;
