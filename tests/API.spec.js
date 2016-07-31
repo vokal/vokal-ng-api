@@ -4,7 +4,7 @@ describe( "API with Humps", function ()
 
     var API;
     var url        = "/api/endpoint";
-    var authUrl    = "/api/auth/error/good";
+    var authUrl    = "/api/auth/error";
     var humpsUrl   = "/humps";
     var noHumpsUrl = "/no-humps";
     var $httpBackend;
