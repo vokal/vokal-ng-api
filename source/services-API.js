@@ -2,9 +2,9 @@
 
 angular.module( "vokal.API", [ "vokal.Humps" ] )
 
-.factory( "API", [ "$http", "$rootScope", "$q", "$location", "Humps",
+.factory( "API", [ "$http", "$rootScope", "$q", "$location", "$timeout", "Humps",
 
-    function ( $http, $rootScope, $q, $location, Humps )
+    function ( $http, $rootScope, $q, $location, $timeout, Humps )
     {
         "use strict";
 
@@ -269,29 +269,33 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                                 } );
                                 promiseQueue.push( defer );
 
-                                // Attempt to resolve authorization issue with user-supplied function
-                                that.unauthorizedInterrupt( data, options, status ).then( function ()
+                                $timeout( function ()
                                 {
-                                    // Authorization was resolved, so re-make queued requests without interruption
-                                    flushing = true;
-
-                                    $q.all( promiseQueue ).finally( function ()
+                                    // Attempt to resolve authorization issue with user-supplied function
+                                    that.unauthorizedInterrupt( data, options, status ).then( function ()
                                     {
-                                        flushing     = false;
+                                        // Authorization was resolved, so re-make queued requests without interruption
+                                        flushing = true;
+
+                                        $q.all( promiseQueue ).finally( function ()
+                                        {
+                                            flushing     = false;
+                                            interrupting = false;
+                                        } );
+
+                                        for( var i = 0; i < requestQueue.length; i++ )
+                                        {
+                                            that.repeatRequest( requestQueue[ i ] );
+                                        }
+                                    },
+                                    function ( failure )
+                                    {
+                                        // Authorization was rejected, so broadcast failure event
                                         interrupting = false;
+                                        $rootScope.$broadcast( "APIAuthorizationFailure", failure || "" );
                                     } );
 
-                                    for( var i = 0; i < requestQueue.length; i++ )
-                                    {
-                                        that.repeatRequest( requestQueue[ i ] );
-                                    }
-                                },
-                                function ( failure )
-                                {
-                                    // Authorization was rejected, so broadcast failure event
-                                    interrupting = false;
-                                    $rootScope.$broadcast( "APIAuthorizationFailure", failure || "" );
-                                } );
+                                }, 0 );
 
                                 return;
                             }
@@ -319,6 +323,8 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                                 } );
                                 promiseQueue.push( defer );
                             }
+
+                            return;
                         }
                     }
 

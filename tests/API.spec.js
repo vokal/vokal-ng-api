@@ -248,6 +248,9 @@ describe( "API with Humps", function ()
         } );
 
         $httpBackend.flush();
+        $timeout.flush();
+        $httpBackend.flush();
+        $timeout.flush();
         expect( result ).toBe( "success" );
 
     } );
@@ -274,6 +277,7 @@ describe( "API with Humps", function ()
         } );
 
         $httpBackend.flush();
+        $timeout.flush();
         expect( result ).toBe( "unauthorized" );
 
     } );
