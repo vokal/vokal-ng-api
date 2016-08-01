@@ -19,7 +19,7 @@ describe( "API without Humps", function ()
 
                 .respond( function ( method, url, data )
                 {
-                    var obj = angular.fromJson ( data );
+                    var obj = angular.fromJson( data );
 
                     return [
                         201,

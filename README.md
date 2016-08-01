@@ -66,6 +66,7 @@ The following properties can be set directly or via the constructor config objec
 * [transformHumps](#prop-transformHumps)
 * [cancelOnRouteChange](#prop-cancelOnRouteChange)
 * [unauthorizedInterrupt](#prop-unauthorizedInterrupt)
+* [loginPath](#prop-loginPath)
 
 Several methods are available during direct configuration:
 
@@ -120,9 +121,32 @@ When the application route changes, any in-progress API calls will be canceled.
 
 #### <a id="prop-unauthorizedInterrupt"></a>`unauthorizedInterrupt`
 
-*Boolean* | Default: `true`
+*Boolean or Function* | Default: `true`
 
-When an API route returns a 401 or 403 status code, the normal error-handler events will not be fired. This allows any redirect handling attached to the unauthorized route function to run without conflict.
+When a request on a non-login page returns a `401` status code, the normal error-handler events will not be fired, and the request promise will not be rejected. This allows for clean handling of the `APIRequestUnauthorized` event, which may implement a redirect to a login page or otherwise attempt to resolve an authorization error.
+
+When a function is supplied for this value, it should be used as an attempt to resolve the authorization issue.  For example, an expired token could be exchanged for a fresh one, and re-added to the service via `setKey()`.  This function should return a promise that is resolved or rejected depending upon whether or not it was successful in resolving the authorization issue.  If resolved, the original API request will be re-run, along with any other authorization-failing API requests that had been held in a queue while the resolution was being attempted.  If rejected, the `APIAuthorizationFailure` event will be broadcast, along with an optional message sent from the function.
+
+The function will have access to the `data`, `options`, and `status` values from the initial unauthorized request, as defined in the [Promise for HTTP Alias Methods](#promise-return).
+
+```javascript
+apiService.unauthorizedInterrupt = function ( data, options, status )
+{
+    var deferred = $q.defer();
+
+    // TODO: Attempt to resolve authorization issue, then resolve() or reject() promise
+
+    return deferred.promise;
+};
+```
+
+* * *
+
+#### <a id="prop-loginPath"></a>`loginPath`
+
+*String* | Default: `null`
+
+Redirecting to a login page is outside of the scope of this service's intended function, but you can provide your login path to make sure that the `401`-handling functions of this service (`unauthorizedInterrupt` & `APIRequestUnauthorized`) do not activate when making requests on the login page.  The supplied path will be compared to the value of `$location.path()`.
 
 * * *
 
@@ -170,6 +194,7 @@ The following methods can be called on an instantiated `API` service once it has
 * [$put( path, requestData )](#method-put)
 * [$patch( path, requestData )](#method-patch)
 * [$delete( path )](#method-delete)
+* [repeatRequest( request )](#method-repeatRequest)
 
 [Promise for HTTP Alias Methods](#promise-return)
 
@@ -281,6 +306,20 @@ Performs an HTTP `DELETE` request on the supplied API route.
 
 * * *
 
+#### <a id="method-repeatRequest"></a>`repeatRequest( request )`
+
+Performs a request and resolves/rejects a promise. This is the method used to repeat requests with authentication issues via `unauthorizedInterrupt`.
+
+##### Arguments
+
+1. `request` | *Object* | contains request specifications and the promise to resolve/reject
+ * `method` | *String* | HTTP method, ex. GET, POST, etc.
+ * `path` | *String* | the path of the request being repeated
+ * `requestData` | *Object* | the body of the request being repeated
+ * `promise` | *Promise* | the promise returned by the request being repeated
+
+* * *
+
 ### <a id="promise-return"></a>Promise for HTTP Alias Methods
 
 Methods beginning with `$` return an [Angular promise](https://docs.angularjs.org/api/ng/service/$q) that resolves upon completion of the API request.  The resolve/reject handlers are passed a response object with the following format:
@@ -311,6 +350,7 @@ The following events will broadcast on `$rootScope` during the `API` service's l
 * [APIRequestSuccess](#event-APIRequestSuccess)
 * [APIRequestError](#event-APIRequestError)
 * [APIRequestUnauthorized](#event-APIRequestUnauthorized)
+* [APIAuthorizationFailure](#event-APIAuthorizationFailure)
 * [APIRequestCanceled](#event-APIRequestCanceled)
 
 * * *
@@ -363,13 +403,23 @@ Broadcast upon the erroneous completion of any API request.
 
 #### <a id="event-APIRequestUnauthorized"></a>`APIRequestUnauthorized`
 
-Broadcast upon the unauthorized (status codes `401` or `403`) completion of any API request.
+Broadcast upon the unauthorized (status code `401`) completion of any API request.
 
 ##### Listener Arguments
 
 1. `options` | *Object* | the options that were passed into the `$http` request
 2. `data` | *Object* | the response from the `$http` request
 3. `status` | *Number* | the HTTP status code for the completed request
+
+* * *
+
+#### <a id="event-APIAuthorizationFailure"></a>`APIAuthorizationFailure`
+
+Broadcast upon the failure of the function supplied via `unauthorizedInterrupt` to successfully resolve an authorization issue.
+
+##### Listener Arguments
+
+1. `failure` | *String* | a message sent from the `unauthorizedInterrupt` function
 
 * * *
 

@@ -2,11 +2,16 @@
 
 angular.module( "vokal.API", [ "vokal.Humps" ] )
 
-.factory( "API", [ "$http", "$rootScope", "$q", "Humps",
+.factory( "API", [ "$http", "$rootScope", "$q", "$location", "$timeout", "Humps",
 
-    function ( $http, $rootScope, $q, Humps )
+    function ( $http, $rootScope, $q, $location, $timeout, Humps )
     {
         "use strict";
+
+        var interrupting = false;
+        var requestQueue = [];
+        var promiseQueue = [];
+        var flushing     = false;
 
         // ** Function copied from private angular.js source
         function tryDecodeURIComponent( value )
@@ -158,6 +163,10 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 {
                     this.unauthorizedInterrupt = config.unauthorizedInterrupt;
                 }
+                if( typeof config.loginPath !== "undefined" )
+                {
+                    this.loginPath = config.loginPath;
+                }
             }
 
         };
@@ -169,6 +178,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         apiConstruct.prototype.transformHumps        = true;
         apiConstruct.prototype.cancelOnRouteChange   = false;
         apiConstruct.prototype.unauthorizedInterrupt = true;
+        apiConstruct.prototype.loginPath             = null;
 
         apiConstruct.prototype.extendHeaders = function ( headers )
         {
@@ -236,12 +246,88 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 {
                     $rootScope.$broadcast( "APIRequestComplete", options, data, status );
 
-                    if( status === 401 || status === 403 )
+                    if( status === 401 && $location.path() !== that.loginPath )
                     {
-                        $rootScope.$broadcast( "APIRequestUnauthorized", options, data, status );
-                        // By default, prevent resolutions for unauthorized requests to facilitate clean redirects
-                        if( that.unauthorizedInterrupt )
+                        if( !interrupting )
                         {
+                            $rootScope.$broadcast( "APIRequestUnauthorized", options, data, status );
+
+                            // By default, prevent resolutions for unauthorized requests to facilitate clean redirects
+                            if( that.unauthorizedInterrupt === true )
+                            {
+                                return;
+                            }
+                            else if( typeof that.unauthorizedInterrupt === "function" )
+                            {
+                                interrupting = true;
+
+                                requestQueue.push( {
+                                    method:      method,
+                                    path:        path,
+                                    requestData: requestData,
+                                    promise:     defer
+                                } );
+                                promiseQueue.push( defer );
+
+                                $timeout( function ()
+                                {
+                                    // Attempt to resolve authorization issue with user-supplied function
+                                    that.unauthorizedInterrupt( data, options, status ).then( function ()
+                                    {
+                                        // Authorization was resolved, so re-make queued requests without interruption
+                                        flushing = true;
+
+                                        $q.all( promiseQueue ).finally( function ()
+                                        {
+                                            flushing     = false;
+                                            interrupting = false;
+                                            requestQueue = [];
+                                            promiseQueue = [];
+                                        } );
+
+                                        for( var i = 0; i < requestQueue.length; i++ )
+                                        {
+                                            that.repeatRequest( requestQueue[ i ] );
+                                        }
+                                    },
+                                    function ( failure )
+                                    {
+                                        // Authorization was rejected, so broadcast failure event
+                                        interrupting = false;
+                                        requestQueue = [];
+                                        promiseQueue = [];
+                                        $rootScope.$broadcast( "APIAuthorizationFailure", failure || "" );
+                                    } );
+
+                                }, 0 );
+
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if( flushing )
+                            {
+                                // If queued requests are already being re-run, re-run this one
+                                that.repeatRequest( {
+                                    method:      method,
+                                    path:        path,
+                                    requestData: requestData,
+                                    promise:     defer
+                                } );
+                            }
+                            else
+                            {
+                                // Queue this request while the authorization issue is being resolved
+                                requestQueue.push( {
+                                    method:      method,
+                                    path:        path,
+                                    requestData: requestData,
+                                    promise:     defer
+                                } );
+                                promiseQueue.push( defer );
+                            }
+
                             return;
                         }
                     }
@@ -309,6 +395,28 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         apiConstruct.prototype.$delete = function ( path )
         {
             return this.apiRequest( "delete", path );
+        };
+
+        apiConstruct.prototype.repeatRequest = function ( request )
+        {
+            this.apiRequest( request.method, request.path, request.requestData )
+
+                .then( function ( response )
+                {
+                    request.promise.resolve( {
+                        data:    response.data,
+                        options: response.options,
+                        status:  response.status
+                    } );
+                },
+                function ( response )
+                {
+                    request.promise.reject( {
+                        data:    response.data,
+                        options: response.options,
+                        status:  response.status
+                    } );
+                } );
         };
 
         return apiConstruct;
