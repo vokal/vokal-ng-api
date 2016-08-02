@@ -175,7 +175,6 @@ describe( "API with Humps", function ()
 
         expect( Test1.rootPath ).toBe( "" );
         expect( Test2.rootPath ).toBe( "testPath" );
-
     } );
 
     it( "should expose the name to event listeners", function ()
@@ -221,7 +220,6 @@ describe( "API with Humps", function ()
         $httpBackend.flush();
         $timeout.flush();
         expect( result ).toBe( "success" );
-
     } );
 
     it( "should broadcast on a failed attempt to resolve an authorization issue", function ()
@@ -233,8 +231,7 @@ describe( "API with Humps", function ()
                 var deferred = $q.defer();
                 deferred.reject( data.error );
                 return deferred.promise;
-            },
-            name: "test"
+            }
         } );
 
         testAPI.setKey( "bad" );
@@ -248,7 +245,35 @@ describe( "API with Humps", function ()
         $httpBackend.flush();
         $timeout.flush();
         expect( result ).toBe( "unauthorized" );
+    } );
 
+    it( "should not run authentication functions on a whitelisted route", function ()
+    {
+        var resultOne = "unset";
+        var resultTwo = "unset";
+        var testAPI = new API( {
+            unauthorizedInterrupt: function ( data )
+            {
+                resultOne = "set";
+                var deferred = $q.defer();
+                deferred.reject( data.error );
+                return deferred.promise;
+            },
+            loginRoutes: [ "test", authUrl ]
+        } );
+
+        testAPI.setKey( "bad" );
+        testAPI.$get( authUrl );
+
+        $rootScope.$on( "APIAuthorizationFailure", function ( event, message )
+        {
+            resultTwo = message;
+        } );
+
+        $httpBackend.flush();
+        $timeout.flush();
+        expect( resultOne ).toBe( "unset" );
+        expect( resultTwo ).toBe( "unset" );
     } );
 
     it( "should only allow keys to be a string", function ()
@@ -281,7 +306,7 @@ describe( "API with Humps", function ()
         expect( testAPI.cancelOnRouteChange ).toBe( false );
         expect( testAPI.unauthorizedInterrupt ).toBe( true );
         expect( testAPI.loginPath ).toBe( null );
-
+        expect( testAPI.loginRoutes ).toBe( null );
     } );
 
     it( "should be configurable at instantiation", function ()
@@ -294,6 +319,7 @@ describe( "API with Humps", function ()
             cancelOnRouteChange: true,
             unauthorizedInterrupt: false,
             loginPath: "/login",
+            loginRoutes: "login",
             customField: "lala"
         } );
 
@@ -305,8 +331,8 @@ describe( "API with Humps", function ()
         expect( testAPI.cancelOnRouteChange ).toBe( true );
         expect( testAPI.unauthorizedInterrupt ).toBe( false );
         expect( testAPI.loginPath ).toBe( "/login" );
+        expect( testAPI.loginRoutes ).toBe( "login" );
         expect( testAPI.customField ).toBeUndefined();
-
     } );
 
     it( "should allow the headers to be extended", function ()
@@ -318,7 +344,6 @@ describe( "API with Humps", function ()
 
         expect( testAPI.getKey() ).toBe( "theKey" );
         expect( testAPI.globalHeaders.customHeader ).toBe( "custom" );
-
     } );
 
     it( "should create querystrings", function ()
