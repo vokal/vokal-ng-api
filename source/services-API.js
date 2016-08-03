@@ -131,6 +131,23 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             return path + ( queryParts.length ? "?" + queryParts.join( "&" ) : "" );
         };
 
+        // Matching function for whitelisted routes
+        var matcher = function ( routes, route )
+        {
+            if( angular.isString( routes ) )
+            {
+                return routes === route;
+            }
+            else if( angular.isArray( routes ) )
+            {
+                return routes.indexOf( route ) > -1;
+            }
+            else
+            {
+                return false;
+            }
+        };
+
         // Define constructor
         var apiConstruct = function ( config )
         {
@@ -167,6 +184,10 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 {
                     this.loginPath = config.loginPath;
                 }
+                if( typeof config.loginRoutes !== "undefined" )
+                {
+                    this.loginRoutes = config.loginRoutes;
+                }
             }
 
         };
@@ -179,6 +200,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         apiConstruct.prototype.cancelOnRouteChange   = false;
         apiConstruct.prototype.unauthorizedInterrupt = true;
         apiConstruct.prototype.loginPath             = null;
+        apiConstruct.prototype.loginRoutes           = null;
 
         apiConstruct.prototype.extendHeaders = function ( headers )
         {
@@ -246,7 +268,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 {
                     $rootScope.$broadcast( "APIRequestComplete", options, data, status );
 
-                    if( status === 401 && $location.path() !== that.loginPath )
+                    if( status === 401 && $location.path() !== that.loginPath && !matcher( that.loginRoutes, path ) )
                     {
                         if( !interrupting )
                         {

@@ -67,6 +67,7 @@ The following properties can be set directly or via the constructor config objec
 * [cancelOnRouteChange](#prop-cancelOnRouteChange)
 * [unauthorizedInterrupt](#prop-unauthorizedInterrupt)
 * [loginPath](#prop-loginPath)
+* [loginRoutes](#prop-loginRoutes)
 
 Several methods are available during direct configuration:
 
@@ -146,7 +147,19 @@ apiService.unauthorizedInterrupt = function ( data, options, status )
 
 *String* | Default: `null`
 
-Redirecting to a login page is outside of the scope of this service's intended function, but you can provide your login path to make sure that the `401`-handling functions of this service (`unauthorizedInterrupt` & `APIRequestUnauthorized`) do not activate when making requests on the login page.  The supplied path will be compared to the value of `$location.path()`.
+Redirecting to a login page is outside of the scope of this service's intended function, but you can provide your login path to make sure that the `401`-handling functions of this service (`unauthorizedInterrupt` & `APIRequestUnauthorized`) do not activate when making requests on the login page, where a `401` is a semantically valid response to invalid credentials.
+
+The supplied path will be compared to the value of `$location.path()`.
+
+* * *
+
+#### <a id="prop-loginRoutes"></a>`loginRoutes`
+
+*String or Array* | Default: `null`
+
+Supply a String or Array of Strings that correspond to API routes that should be excluded from the `401`-handling functions of this service (`unauthorizedInterrupt` & `APIRequestUnauthorized`).  Similarly to `loginPath`, this allows for the handling of a semantically valid `401` response to invalid login credentials.  Useful when your login mechanism isn't siloed to a single page.
+
+The supplied route or routes will be compared to the `path` value passed into the HTTP alias method, without prepending `rootPath`.
 
 * * *
 
