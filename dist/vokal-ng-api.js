@@ -25,6 +25,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         "use strict";
 
         var interrupting = false;
+        var resolving    = false;
         var requestQueue = [];
         var promiseQueue = [];
         var flushing     = false;
@@ -184,6 +185,10 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 {
                     this.rootPath = config.rootPath;
                 }
+                if( typeof config.keyName !== "undefined" )
+                {
+                    this.keyName = config.keyName;
+                }
                 if( typeof config.transformHumps !== "undefined" )
                 {
                     this.transformHumps = config.transformHumps;
@@ -212,6 +217,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         apiConstruct.prototype.name                  = "";
         apiConstruct.prototype.globalHeaders         = {};
         apiConstruct.prototype.rootPath              = "";
+        apiConstruct.prototype.keyName               = "Authorization";
         apiConstruct.prototype.transformHumps        = true;
         apiConstruct.prototype.cancelOnRouteChange   = false;
         apiConstruct.prototype.unauthorizedInterrupt = true;
@@ -224,7 +230,8 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         };
         apiConstruct.prototype.setKey = function ( key )
         {
-            this.globalHeaders.AUTHORIZATION = typeof( key ) === "string" ? key : "";
+            this.globalHeaders[ this.keyName ] = typeof( key ) === "string" ? key : "";
+
             if( typeof( key ) !== "string" && typeof( key ) !== "undefined" && key !== null )
             {
                 console.warn( "setKey( key ) only accepts a String for parameter key" );
@@ -232,23 +239,22 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         };
         apiConstruct.prototype.getKey = function ()
         {
-            return this.globalHeaders.AUTHORIZATION;
+            return this.globalHeaders[ this.keyName ];
         };
-
-        // To be accessible for tests
         apiConstruct.prototype.queryUrl = queryUrl;
 
         // The driver for API requests
-        apiConstruct.prototype.apiRequest = function ( method, path, requestData )
+        apiConstruct.prototype.apiRequest = function ( method, path, requestData, repeating )
         {
-            var that    = this;
-            var defer   = $q.defer();
-            var options = {
+            var that     = this;
+            var defer    = $q.defer();
+            var canceler = $q.defer();
+            var options  = {
                 method:  method,
                 url:     this.rootPath + path,
                 headers: this.globalHeaders,
                 data:    requestData || {},
-                timeout: defer.promise,
+                timeout: canceler.promise,
                 ngName:  this.name
             };
 
@@ -282,17 +288,20 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
                 .error( function ( data, status )
                 {
-                    $rootScope.$broadcast( "APIRequestComplete", options, data, status );
-
-                    if( status === 401 && $location.path() !== that.loginPath && !matcher( that.loginRoutes, path ) )
+                    if( status !== -1 )
                     {
-                        if( !interrupting )
-                        {
-                            $rootScope.$broadcast( "APIRequestUnauthorized", options, data, status );
+                        $rootScope.$broadcast( "APIRequestComplete", options, data, status );
+                    }
 
+                    if( !resolving && status === 401 &&
+                        $location.path() !== that.loginPath && !matcher( that.loginRoutes, path ) )
+                    {
+                        if( !interrupting && !repeating )
+                        {
                             // By default, prevent resolutions for unauthorized requests to facilitate clean redirects
                             if( that.unauthorizedInterrupt === true )
                             {
+                                $rootScope.$broadcast( "APIRequestUnauthorized", options, data, status );
                                 return;
                             }
                             else if( typeof that.unauthorizedInterrupt === "function" )
@@ -309,11 +318,15 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
                                 $timeout( function ()
                                 {
+                                    // Disable 401 handling for any requests made during resolution attempt
+                                    resolving = true;
+
                                     // Attempt to resolve authorization issue with user-supplied function
                                     that.unauthorizedInterrupt( data, options, status ).then( function ()
                                     {
                                         // Authorization was resolved, so re-make queued requests without interruption
-                                        flushing = true;
+                                        resolving = false;
+                                        flushing  = true;
 
                                         $q.all( promiseQueue ).finally( function ()
                                         {
@@ -331,6 +344,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                                     function ( failure )
                                     {
                                         // Authorization was rejected, so broadcast failure event
+                                        resolving    = false;
                                         interrupting = false;
                                         requestQueue = [];
                                         promiseQueue = [];
@@ -341,10 +355,31 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
                                 return;
                             }
+                            else
+                            {
+                                $rootScope.$broadcast( "APIRequestUnauthorized", options, data, status );
+                            }
                         }
                         else
                         {
-                            if( flushing )
+                            if( repeating )
+                            {
+                                // If a repeated request still fails with a 401, broadcast the unauthorized event
+                                $rootScope.$broadcast( "APIRequestUnauthorized", options, data, status );
+
+                                // Silently cancel repeating requests so APIRequestUnauthorized can be handled
+                                for( var i = 0; i < promiseQueue.length; i++ )
+                                {
+                                    promiseQueue[ i ].promise.$cancel(
+                                        "Request canceled due to authorization failure" );
+                                }
+
+                                flushing     = false;
+                                interrupting = false;
+                                requestQueue = [];
+                                promiseQueue = [];
+                            }
+                            else if( flushing )
                             {
                                 // If queued requests are already being re-run, re-run this one
                                 that.repeatRequest( {
@@ -370,12 +405,15 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                         }
                     }
 
-                    $rootScope.$broadcast( "APIRequestError", options, data, status );
-                    defer.reject( {
-                        data:    data,
-                        options: options,
-                        status:  status
-                    } );
+                    if( status !== -1 )
+                    {
+                        $rootScope.$broadcast( "APIRequestError", options, data, status );
+                        defer.reject( {
+                            data:    data,
+                            options: options,
+                            status:  status
+                        } );
+                    }
 
                 } );
 
@@ -397,13 +435,18 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                 } );
             }
 
-            defer.promise.$cancel = function ( message, options )
+            defer.promise.$cancel = function ( message, options, reject )
             {
+                canceler.resolve();
                 $rootScope.$broadcast( "APIRequestCanceled", options, message );
-                defer.reject( {
-                    data:    message || "Request cancelled",
-                    options: options
-                } );
+
+                if( reject )
+                {
+                    defer.reject( {
+                        data:    message || "Request canceled",
+                        options: options
+                    } );
+                }
             };
 
             return defer.promise;
@@ -437,7 +480,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
         apiConstruct.prototype.repeatRequest = function ( request )
         {
-            this.apiRequest( request.method, request.path, request.requestData )
+            this.apiRequest( request.method, request.path, request.requestData, true )
 
                 .then( function ( response )
                 {
