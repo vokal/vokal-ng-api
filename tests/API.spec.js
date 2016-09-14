@@ -28,7 +28,7 @@ describe( "API with Humps", function ()
 
             .respond( function ( method, url, data, headers )
             {
-                if( headers.AUTHORIZATION === "bad" )
+                if( headers.Authorization === "bad" )
                 {
                     return [
                         401,
@@ -36,7 +36,7 @@ describe( "API with Humps", function ()
                         {}
                     ];
                 }
-                else if( headers.AUTHORIZATION === "good" )
+                else if( headers.Authorization === "good" )
                 {
                     return [
                         200,
@@ -95,7 +95,34 @@ describe( "API with Humps", function ()
         $httpBackend.flush();
     } );
 
-    it( "should return a $cancel option on the promise", function ()
+    it( "should abort silently when $cancel is called", function ()
+    {
+        var promise;
+        var flag;
+
+        $httpBackend.expectGET( url );
+        promise = ( new API() ).$get( url );
+        promise.then( function ()
+        {
+            flag = "Resolve";
+        },
+        function ()
+        {
+            flag = "Reject";
+        } );
+
+        promise.$cancel();
+
+        $timeout( function ()
+        {
+            expect( flag ).toBe( undefined );
+        }, 100 );
+
+        $timeout.flush();
+
+    } );
+
+    it( "should reject when $cancel is called with the reject flag", function ()
     {
         var promise;
         var flag;
@@ -111,13 +138,15 @@ describe( "API with Humps", function ()
             flag = obj.data;
         } );
 
-        expect( promise.$cancel ).toBeDefined();
+        promise.$cancel( "Denied", {}, true );
 
-        // $cancel is called before the backend flush()
-        promise.$cancel( "Denied" );
-        $httpBackend.flush();
+        $timeout( function ()
+        {
+            expect( flag ).toBe( "Denied" );
+        }, 100 );
 
-        expect( flag ).toBe( "Denied" );
+        $timeout.flush();
+
     } );
 
     it( "should not $cancel already received data", function ()
@@ -222,6 +251,34 @@ describe( "API with Humps", function ()
         expect( result ).toBe( "success" );
     } );
 
+    it( "should broadcast when a supposedly resolved authorization issue still fails", function ()
+    {
+        var result;
+        var testAPI = new API( {
+            unauthorizedInterrupt: function ()
+            {
+                var deferred = $q.defer();
+                testAPI.setKey( "bad" );
+                deferred.resolve();
+                return deferred.promise;
+            }
+        } );
+
+        testAPI.setKey( "bad" );
+        testAPI.$get( authUrl );
+
+        $rootScope.$on( "APIRequestUnauthorized", function ()
+        {
+            result = "failure";
+        } );
+
+        $httpBackend.flush();
+        $timeout.flush();
+        $httpBackend.flush();
+        $timeout.flush();
+        expect( result ).toBe( "failure" );
+    } );
+
     it( "should broadcast on a failed attempt to resolve an authorization issue", function ()
     {
         var result;
@@ -229,7 +286,10 @@ describe( "API with Humps", function ()
             unauthorizedInterrupt: function ( data )
             {
                 var deferred = $q.defer();
-                deferred.reject( data.error );
+                testAPI.$get( authUrl ).catch( function ()  // This 401 should go unresolved, just error-handled
+                {
+                    deferred.reject( data.error );
+                } );
                 return deferred.promise;
             }
         } );
@@ -244,6 +304,7 @@ describe( "API with Humps", function ()
 
         $httpBackend.flush();
         $timeout.flush();
+        $httpBackend.flush();
         expect( result ).toBe( "unauthorized" );
     } );
 
@@ -302,6 +363,7 @@ describe( "API with Humps", function ()
         expect( testAPI.getKey() ).toBeUndefined();
         expect( testAPI.name ).toBe( "" );
         expect( testAPI.rootPath ).toBe( "" );
+        expect( testAPI.keyName ).toBe( "Authorization" );
         expect( testAPI.transformHumps ).toBe( true );
         expect( testAPI.cancelOnRouteChange ).toBe( false );
         expect( testAPI.unauthorizedInterrupt ).toBe( true );
@@ -313,8 +375,9 @@ describe( "API with Humps", function ()
     {
         var testAPI = new API( {
             name: "testAPI",
-            globalHeaders: { AUTHORIZATION: "theKey", customHeader: "custom" },
+            globalHeaders: { AuthToken: "theKey", CustomHeader: "custom" },
             rootPath: "/api/v1/",
+            keyName: "AuthToken",
             transformHumps: false,
             cancelOnRouteChange: true,
             unauthorizedInterrupt: false,
@@ -325,8 +388,9 @@ describe( "API with Humps", function ()
 
         expect( testAPI.name ).toBe( "testAPI" );
         expect( testAPI.getKey() ).toBe( "theKey" );
-        expect( testAPI.globalHeaders.customHeader ).toBe( "custom" );
+        expect( testAPI.globalHeaders.CustomHeader ).toBe( "custom" );
         expect( testAPI.rootPath ).toBe( "/api/v1/" );
+        expect( testAPI.keyName ).toBe( "AuthToken" );
         expect( testAPI.transformHumps ).toBe( false );
         expect( testAPI.cancelOnRouteChange ).toBe( true );
         expect( testAPI.unauthorizedInterrupt ).toBe( false );
@@ -340,10 +404,10 @@ describe( "API with Humps", function ()
         var testAPI = new API();
 
         testAPI.setKey( "theKey" );
-        testAPI.extendHeaders( { customHeader: "custom" } );
+        testAPI.extendHeaders( { CustomHeader: "custom" } );
 
         expect( testAPI.getKey() ).toBe( "theKey" );
-        expect( testAPI.globalHeaders.customHeader ).toBe( "custom" );
+        expect( testAPI.globalHeaders.CustomHeader ).toBe( "custom" );
     } );
 
     it( "should create querystrings", function ()

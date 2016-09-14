@@ -30,7 +30,7 @@ Facebook.setKey( token );
 var Facebook = new API( {
     rootPath: "https://graph.facebook.com/",
     transformHumps: false,
-    globalHeaders: { AUTHORIZATION: token }
+    globalHeaders: { Authorization: token }
 } );
 ```
 
@@ -48,7 +48,7 @@ angular.module( "vokal.Facebook", [ "vokal.API" ] )
         var Facebook = new API( {
             rootPath: "https://graph.facebook.com/",
             transformHumps: false,
-            globalHeaders: { AUTHORIZATION: token }
+            globalHeaders: { Authorization: token }
         } );
 
         return Facebook;
@@ -63,6 +63,7 @@ The following properties can be set directly or via the constructor config objec
 * [name](#prop-name)
 * [globalHeaders](#prop-globalHeaders)
 * [rootPath](#prop-rootPath)
+* [keyName](#prop-keyName)
 * [transformHumps](#prop-transformHumps)
 * [cancelOnRouteChange](#prop-cancelOnRouteChange)
 * [unauthorizedInterrupt](#prop-unauthorizedInterrupt)
@@ -104,6 +105,14 @@ All API requests will be prepended with the supplied string.
 
 * * *
 
+#### <a id="prop-keyName"></a>`keyName`
+
+*String* | Default: `"Authorization"`
+
+The name of the header field in which your API's key or token should be stored.
+
+* * *
+
 #### <a id="prop-transformHumps"></a>`transformHumps`
 
 *Boolean* | Default: `true`
@@ -124,11 +133,11 @@ When the application route changes, any in-progress API calls will be canceled.
 
 *Boolean or Function* | Default: `true`
 
-When a request on a non-login page returns a `401` status code, the normal error-handler events will not be fired, and the request promise will not be rejected. This allows for clean handling of the `APIRequestUnauthorized` event, which may implement a redirect to a login page or otherwise attempt to resolve an authorization error.
+When a request on a non-login page returns a `401` status code, the normal error-handler events will not be fired, and the request promise will not be rejected. This allows for clean handling of the `APIRequestUnauthorized` event, which may implement a redirect to a login page or otherwise attempt to resolve an authorization error.  Set to `false` to re-enable the error-handler events and promise rejection.
 
-When a function is supplied for this value, it should be used as an attempt to resolve the authorization issue.  For example, an expired token could be exchanged for a fresh one, and re-added to the service via `setKey()`.  This function should return a promise that is resolved or rejected depending upon whether or not it was successful in resolving the authorization issue.  If resolved, the original API request will be re-run, along with any other authorization-failing API requests that had been held in a queue while the resolution was being attempted.  If rejected, the `APIAuthorizationFailure` event will be broadcast, along with an optional message sent from the function.
+If a function is supplied for this value, it should be used as an attempt to resolve an authorization issue.  For example, an expired token could be exchanged for a fresh one, and re-added to the service via `setKey()`.  This function should return a promise that is resolved or rejected depending upon whether or not it was successful in resolving the authorization issue.  If resolved, the original API request will be re-run, along with any other authorization-failing API requests that had been automatically held in a queue while the resolution was being attempted.  If rejected, the `APIAuthorizationFailure` event will be broadcast, along with an optional message sent from the function.
 
-The function will have access to the `data`, `options`, and `status` values from the initial unauthorized request, as defined in the [Promise for HTTP Alias Methods](#promise-return).
+The function will have access to the `data`, `options`, and `status` values from the initial unauthorized request, as defined in the [Promise for HTTP Alias Methods](#promise-return).  Custom `401` handling will be disabled for any requests made in this function, to prevent the possibility of infinite authorization loops.
 
 ```javascript
 apiService.unauthorizedInterrupt = function ( data, options, status )
@@ -140,6 +149,8 @@ apiService.unauthorizedInterrupt = function ( data, options, status )
     return deferred.promise;
 };
 ```
+
+Any re-run requests following a successful authorization resolution that still end up returning a `401` will broadcast the `APIRequestUnauthorized` event and not attempt a second resolution.
 
 * * *
 
@@ -177,7 +188,7 @@ Will extend the existing headers object, which contains the authorization key.
 
 #### <a id="method-setKey"></a>`setKey( key )`
 
-Sets the key that you will use to authenticate with your API.  The key will be assigned to a header value named `AUTHORIZATION`.
+Sets the key that you will use to authenticate with your API.  The key will be assigned to the header value defined via `keyName`, or `"Authorization"` by default.
 
 ##### Arguments
 
@@ -222,7 +233,7 @@ Builds a URL from a base path and an object of parameters. This is the method us
 1. `path` | *String* | an API route
 2. `requestData` | *Object* | an object that will be serialized into a query string
 3. `options` | *Object* | options object
- * `transformHumps` | *Boolean* | Default: `false` whether to apply decamelize
+ * `transformHumps` | *Boolean* | set to `true` to apply decamelize
 
 ##### Returns
 
@@ -337,20 +348,30 @@ Performs a request and resolves/rejects a promise. This is the method used to re
 
 Methods beginning with `$` return an [Angular promise](https://docs.angularjs.org/api/ng/service/$q) that resolves upon completion of the API request.  The resolve/reject handlers are passed a response object with the following format:
 
-    {
-        data:    Object  | the response from the $http request,
-        options: Object  | the options that were passed into the $http request,
-        status:  Number  | the HTTP status code for the completed request
-    }
+```
+{
+    data:    Object  | the response from the $http request,
+    options: Object  | the options that were passed into the $http request,
+    status:  Number  | the HTTP status code for the completed request
+}
+```
 
 The promise includes a custom `$cancel` method:
 
-#### `$cancel( [ message, options ] )`
+#### `$cancel( [ message, options, reject ] )`
 
-Call to halt the HTTP request while in progress.
+Call to halt the HTTP request while in progress.  Unless explicitly told otherwise via `reject`, the promise for the request will remain unresolved.
 
 1. `message` | *String* | a text message to describe the cancellation
 2. `options` | *Object* | an object to describe the canceled request
+3. `reject` | *Boolean* | if set to `true`, the promise will be rejected with an object with the following format:
+
+```javascript
+{
+    data:    message,
+    options: options
+}
+```
 
 * * *
 
@@ -416,7 +437,7 @@ Broadcast upon the erroneous completion of any API request.
 
 #### <a id="event-APIRequestUnauthorized"></a>`APIRequestUnauthorized`
 
-Broadcast upon the unauthorized (status code `401`) completion of any API request.
+Broadcast upon the unauthorized (status code `401`) completion of any API request.  If an attempt to resolve an authorization issue is made via `unauthorizedInterrupt`, this event will only broadcast if a `401` is returned when the initial request is re-run.
 
 ##### Listener Arguments
 

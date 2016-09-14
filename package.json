@@ -1,7 +1,7 @@
 {
   "name": "vokal-ng-api",
   "description": "Vokal's API Service",
-  "version": "6.1.0",
+  "version": "7.0.0",
   "main": "dist/vokal-ng-api.js",
   "homepage": "http://github.com/vokal/vokal-ng-api",
   "bugs": {
