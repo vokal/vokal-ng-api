@@ -437,7 +437,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         };
 
         // Provide a method for application code to reset the authorization-resolution state
-        apiConstruct.resetAuthResolution = function ()
+        apiConstruct.prototype.resetAuthResolution = function ()
         {
             interrupting = false;
             resolving    = false;
