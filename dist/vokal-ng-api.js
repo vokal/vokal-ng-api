@@ -348,7 +348,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                                         interrupting = false;
                                         requestQueue = [];
                                         promiseQueue = [];
-                                        $rootScope.$broadcast( "APIAuthorizationFailure", failure || "" );
+                                        $rootScope.$broadcast( "APIAuthorizationFailure", failure || "", options );
                                     } );
 
                                 }, 0 );
@@ -450,6 +450,16 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
             };
 
             return defer.promise;
+        };
+
+        // Provide a method for application code to reset the authorization-resolution state
+        apiConstruct.prototype.resetAuthResolution = function ()
+        {
+            interrupting = false;
+            resolving    = false;
+            requestQueue = [];
+            promiseQueue = [];
+            flushing     = false;
         };
 
         // Request aliases

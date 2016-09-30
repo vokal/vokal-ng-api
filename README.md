@@ -219,6 +219,7 @@ The following methods can be called on an instantiated `API` service once it has
 * [$patch( path, requestData )](#method-patch)
 * [$delete( path )](#method-delete)
 * [repeatRequest( request )](#method-repeatRequest)
+* [resetAuthResolution()](#method-resetAuthResolution)
 
 [Promise for HTTP Alias Methods](#promise-return)
 
@@ -344,6 +345,12 @@ Performs a request and resolves/rejects a promise. This is the method used to re
 
 * * *
 
+#### <a id="method-resetAuthResolution"></a>`resetAuthResolution()`
+
+Resets the service's authorization-resolution state, so further requests won't be queued or re-run as part of a currently ongoing resolution attempt.  Can be called by application code in times where a resolution requires the short-circuiting of the service so application logic can take over.
+
+* * *
+
 ### <a id="promise-return"></a>Promise for HTTP Alias Methods
 
 Methods beginning with `$` return an [Angular promise](https://docs.angularjs.org/api/ng/service/$q) that resolves upon completion of the API request.  The resolve/reject handlers are passed a response object with the following format:
@@ -454,6 +461,7 @@ Broadcast upon the failure of the function supplied via `unauthorizedInterrupt` 
 ##### Listener Arguments
 
 1. `failure` | *String* | a message sent from the `unauthorizedInterrupt` function
+2. `options` | *Object* | the options that were passed into the original `$http` request that returned a `401`
 
 * * *
 
