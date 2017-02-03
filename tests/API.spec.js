@@ -324,7 +324,7 @@ describe( "API with Humps", function ()
         } );
 
         testAPI.setKey( "bad" );
-        testAPI.$get( authUrl );
+        testAPI.$get( authUrl ).catch( function () {} ); // As of Angular 1.6 all rejections must be handled
 
         $rootScope.$on( "APIAuthorizationFailure", function ( event, message )
         {

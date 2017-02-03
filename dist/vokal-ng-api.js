@@ -4,13 +4,13 @@
     define('vokal-ng-api', ["humps"], function (a0) {
       return (factory(a0));
     });
-  } else if (typeof exports === 'object') {
+  } else if (typeof module === 'object' && module.exports) {
     // Node. Does not work with strict CommonJS, but
     // only CommonJS-like environments that support module.exports,
     // like Node.
     module.exports = factory(require("humps"));
   } else {
-    factory(humps);
+    factory(root["humps"]);
   }
 }(this, function (humps) {
 
@@ -273,8 +273,11 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
             $http( options )
 
-                .success( function ( data, status )
+                .then( function ( response )
                 {
+                    var data   = response.data;
+                    var status = response.status;
+
                     $rootScope.$broadcast( "APIRequestComplete", options, data, status );
                     $rootScope.$broadcast( "APIRequestSuccess",  options, data, status );
 
@@ -284,10 +287,13 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                         status:  status
                     } );
 
-                } )
+                },
 
-                .error( function ( data, status )
+                function ( response )
                 {
+                    var data   = response.data;
+                    var status = response.status;
+
                     if( status !== -1 )
                     {
                         $rootScope.$broadcast( "APIRequestComplete", options, data, status );

@@ -257,8 +257,11 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
             $http( options )
 
-                .success( function ( data, status )
+                .then( function ( response )
                 {
+                    var data   = response.data;
+                    var status = response.status;
+
                     $rootScope.$broadcast( "APIRequestComplete", options, data, status );
                     $rootScope.$broadcast( "APIRequestSuccess",  options, data, status );
 
@@ -268,10 +271,13 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                         status:  status
                     } );
 
-                } )
+                },
 
-                .error( function ( data, status )
+                function ( response )
                 {
+                    var data   = response.data;
+                    var status = response.status;
+
                     if( status !== -1 )
                     {
                         $rootScope.$broadcast( "APIRequestComplete", options, data, status );
