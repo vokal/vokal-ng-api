@@ -125,15 +125,15 @@ The request body will have its parameter names changed from camel case to unders
 
 *Boolean* | Default: `false`
 
-When the application route changes, any in-progress API calls will be canceled.
+Enable by setting to `true`. When the application route changes, any in-progress API calls will be canceled.
 
 * * *
 
 #### <a id="prop-unauthorizedInterrupt"></a>`unauthorizedInterrupt`
 
-*Boolean or Function* | Default: `true`
+*Boolean or Function* | Default: `false`
 
-When a request on a non-login page returns a `401` status code, the normal error-handler events will not be fired, and the request promise will not be rejected. This allows for clean handling of the `APIRequestUnauthorized` event, which may implement a redirect to a login page or otherwise attempt to resolve an authorization error.  Set to `false` to re-enable the error-handler events and promise rejection.
+Enable basic functionality by setting to `true`. When a request on a non-login page returns a `401` status code, the normal error-handler events will not be fired, and the request promise will not be rejected. This allows for clean handling of the `APIRequestUnauthorized` event, which may implement a redirect to a login page or otherwise attempt to resolve an authorization error.
 
 If a function is supplied for this value, it should be used as an attempt to resolve an authorization issue.  For example, an expired token could be exchanged for a fresh one, and re-added to the service via `setKey()`.  This function should return a promise that is resolved or rejected depending upon whether or not it was successful in resolving the authorization issue.  If resolved, the original API request will be re-run, along with any other authorization-failing API requests that had been automatically held in a queue while the resolution was being attempted.  If rejected, the `APIAuthorizationFailure` event will be broadcast, along with an optional message sent from the function.
 

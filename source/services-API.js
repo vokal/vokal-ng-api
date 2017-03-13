@@ -204,7 +204,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
         apiConstruct.prototype.keyName               = "Authorization";
         apiConstruct.prototype.transformHumps        = true;
         apiConstruct.prototype.cancelOnRouteChange   = false;
-        apiConstruct.prototype.unauthorizedInterrupt = true;
+        apiConstruct.prototype.unauthorizedInterrupt = false;
         apiConstruct.prototype.loginPath             = null;
         apiConstruct.prototype.loginRoutes           = null;
 
