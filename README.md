@@ -408,7 +408,7 @@ Broadcast at the start of any API request.
 
 #### <a id="event-APIRequestComplete"></a>`APIRequestComplete`
 
-Broadcast upon the completion of any API request.
+Broadcast upon the completion of any API request.  Not broadcast when a request is canceled using the `$cancel` method.
 
 ##### Listener Arguments
 

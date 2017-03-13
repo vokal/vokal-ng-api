@@ -294,7 +294,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                     var data   = response.data;
                     var status = response.status;
 
-                    if( status !== -1 )
+                    if( !defer.promise.$canceling )
                     {
                         $rootScope.$broadcast( "APIRequestComplete", options, data, status );
                     }
@@ -377,7 +377,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                                 for( var i = 0; i < promiseQueue.length; i++ )
                                 {
                                     promiseQueue[ i ].promise.$cancel(
-                                        "Request canceled due to authorization failure" );
+                                        "Request canceled due to authorization failure", options );
                                 }
 
                                 flushing     = false;
@@ -411,7 +411,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
                         }
                     }
 
-                    if( status !== -1 )
+                    if( !defer.promise.$canceling )
                     {
                         $rootScope.$broadcast( "APIRequestError", options, data, status );
                         defer.reject( {
@@ -443,6 +443,7 @@ angular.module( "vokal.API", [ "vokal.Humps" ] )
 
             defer.promise.$cancel = function ( message, options, reject )
             {
+                defer.promise.$canceling = true;
                 canceler.resolve();
                 $rootScope.$broadcast( "APIRequestCanceled", options, message );
 
