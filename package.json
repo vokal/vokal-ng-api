@@ -1,7 +1,7 @@
 {
   "name": "vokal-ng-api",
-  "description": "Vokal's API Service",
-  "version": "7.1.1",
+  "description": "Vokal's common Angular 1.x API service",
+  "version": "8.0.0",
   "main": "dist/vokal-ng-api.js",
   "homepage": "http://github.com/vokal/vokal-ng-api",
   "bugs": {
@@ -25,17 +25,17 @@
     "humps": "^1.0.0"
   },
   "devDependencies": {
-    "angular": "^1.5.0",
-    "angular-mocks": "^1.5.0",
+    "angular": "^1.6.3",
+    "angular-mocks": "^1.6.3",
     "grunt": "^1.0.1",
     "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-uglify": "^2.2.0",
     "grunt-umd": "^2.3.6",
     "jasmine-core": "^2.4.1",
-    "karma": "^1.1.2",
+    "karma": "^1.5.0",
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.0.2",
-    "karma-phantomjs-launcher": "^1.0.1",
+    "karma-phantomjs-launcher": "^1.0.4",
     "phantomjs": "^2.1.7"
   }
 }
